@@ -1,0 +1,21 @@
+PARSING:
+
+Structures:
+- Structure level 1: defined with unique parameters and a pointer to line, a pointer to pointer to a split, a pointer to an element (the first one)
+- Structure level 2: contains the element ID, a pointer to the specific element structure and a pointer to the next element
+- Strucutre level 3: contains the parameters of specific elements
+- e.g to access the parameters of the first element, struct1.elem.specific_elem.parameter
+
+Parsing strategy
+- Get_next_line
+- Line split
+- Get ID
+- Start a function based on the ID !!HOW!!
+    - Function creates a new structure level 2 and a new structure level 3 (based on the ID)
+    - Fills the level 3 structure fields
+
+Error handling:
+- Error function is called if any error arises
+    - Attempts to free the elements, the line * and the split ** (if they exist)
+    - Printf an error message
+    - Exits
