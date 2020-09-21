@@ -39,6 +39,8 @@ int	main(int argc, char **argv)
 	}
 	ft_putstr_fd("File Open\n", 1);
 	parse_params(&params, fd);
+//	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
+	printf("Light ratio: %f\n", params.light_ratio);
 	free_all(&params);
 	return (0);
 }

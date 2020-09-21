@@ -2,6 +2,7 @@
 # define minirt_h
 
 #include 	"../libft/libft.h"
+#include	"gnl/get_next_line.h"
 #include 	<unistd.h>
 #include	<stdio.h>
 #include	<stdlib.h>
@@ -89,8 +90,8 @@ typedef	struct	s_elem {
 }	t_elem;
 
 typedef	struct	s_param {
-	float		res_x;
-	float		res_y;
+	int			res_x;
+	int			res_y;
 	float		light_ratio;
 	int     	light_rgb;
 	int			save;
@@ -99,14 +100,13 @@ typedef	struct	s_param {
 	t_elem		*elem;
 }	t_param;
 
-int		ft_strcmp(const char *s1, const char *s2);
-int		check_file_extansion(char *filename, char *file_extansion);
+int	ft_strcmp(const char *s1, const char *s2);
+int	check_file_extansion(char *filename, char *file_extansion);
 int 	ft_isblank(int c);
 void    replace_char(char *text, char find, char replace);
 int     parse_params(t_param *param_ptr, int fd);
 void    error_free(t_param *param, char *error_message);
 void    error_free(t_param *param, char *error_message);
 void    free_all(t_param *param);
-int		get_next_line(int fd, char **line);
 
 #endif

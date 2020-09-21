@@ -21,7 +21,7 @@ void    free_all(t_param *param)
 
     if (param->line)
     {
-        printf("Really?");
+        printf("There is a line, the line is: |%s|\n", param->line);
         free(param->line);
         printf("Parameter 'Line' freed\n");
     }
@@ -39,14 +39,14 @@ void    free_all(t_param *param)
     }
     if (param->elem)
         del_all_elem(param->elem);
-    printf("ALL FREED\n");
+    printf("End of Free_All function\n");
 }
 
 void    error_free(t_param *param, char *error_message)
 {
     printf("%s\n", error_message);
     if (param->line)
-        printf("ERROR: %s\n", param->line);
+        printf("ERROR, line: %s\n", param->line);
     free_all(param);
     exit(1);
 }
