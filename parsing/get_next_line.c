@@ -5,7 +5,7 @@
 #include <fcntl.h>
 
 
-/*#define BUFFER_SIZE 1000000*/
+#define BUFFER_SIZE 128
 
 char	*ft_cherche(char *str, char c)
 {
