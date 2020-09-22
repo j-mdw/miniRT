@@ -20,17 +20,45 @@ int
         i++;
     return (i);
 }
-/*
-void
-    get_rgb(t_param *param_ptr)
-{
 
+int
+    get_rgb(t_param *param_ptr, char *s)
+{
+    int     i;
+    int     store;
+    int     rgb;
+
+    if (!(param_ptr->extra_split = ft_split(s, ',')))
+        error_free(param_ptr, "Split error in get_rgb function");
+    if (array_size(param_ptr->extra_split) != 3)
+        error_free(param_ptr, "Incorrect number of RGB parameters");
+    i = 0;
+    rgb = 0;
+    while (param_ptr->extra_split[i])
+    {
+        if (!(ft_isnumber(param_ptr->extra_split[i])))
+            error_free(param_ptr, "Incorrect entries in rgb");
+        else
+        {
+            store = ft_atoi(param_ptr->extra_split[i]);
+            if (store >= 0 && store <= 255)
+            {
+                rgb << 8;
+                rgb += store;
+                i++;
+            }
+            else
+                error_free(param_ptr, "RGB value out of 0-255 range");
+        }
     }
 
+    return(rgb);
+}
+/*
 void
     get_coordinates(t_param *param_ptr);
 */
-/* Checks if a string is of form "digits.digit", then converts it to float */
+/* Checks if a string is of form "digits.digit", and then converts it to float */
 
 float   atoitof(t_param *param_ptr, char *s)
 {
@@ -81,7 +109,7 @@ void
         param_ptr->light_ratio = atoitof(param_ptr, param_ptr->line_split[1]);
         if (param_ptr->light_ratio > 1.0 || param_ptr->light_ratio < 0.0)
             error_free(param_ptr, "Incorrect light ratio, make sure it is between 0.0 and 1.0");
-        param_ptr->light_rgb = get_rgb(param_ptr, param_ptr->line_split[2]);
+       param_ptr->light_rgb = get_rgb(param_ptr, param_ptr->line_split[2]);
     }
 }
 

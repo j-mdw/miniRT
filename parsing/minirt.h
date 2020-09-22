@@ -92,11 +92,12 @@ typedef	struct	s_elem {
 typedef	struct	s_param {
 	int			res_x;
 	int			res_y;
-	float		light_ratio;
+	float		light_ratio;s
 	int     	light_rgb;
 	int			save;
 	char		*line;
 	char		**line_split;
+	char		**extra_split;
 	t_elem		*elem;
 }	t_param;
 
