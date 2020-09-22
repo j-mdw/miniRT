@@ -11,6 +11,16 @@
 #include	<sys/stat.h>
 #include	<fcntl.h>
 
+typedef enum {
+				camera,
+				light,
+				sphere,
+				plane,
+				square,
+				cylinder,
+				triangle,
+}	e_elements;
+
 typedef	struct	s_camera {
 	float		x;
 	float		y;
@@ -90,15 +100,18 @@ typedef	struct	s_elem {
 }	t_elem;
 
 typedef	struct	s_param {
+	int			res_found;
+	int			amb_light_found;
 	int			res_x;
 	int			res_y;
-	float		light_ratio;s
+	float		light_ratio;
 	int     	light_rgb;
 	int			save;
 	char		*line;
 	char		**line_split;
 	char		**extra_split;
 	t_elem		*elem;
+	e_elements	*elem_index;
 }	t_param;
 
 int	ft_strcmp(const char *s1, const char *s2);
@@ -108,6 +121,11 @@ void    replace_char(char *text, char find, char replace);
 int     parse_params(t_param *param_ptr, int fd);
 void    error_free(t_param *param, char *error_message);
 void    error_free(t_param *param, char *error_message);
-void    free_all(t_param *param);
+void	free_all(t_param *param);
+int		ft_isnumber(char *s);
+int		array_size(char **arr_ptr);
+float   atoitof(t_param *param_ptr, char *s);
+int		get_rgb(t_param *param_ptr, char *s);
+void	*add_new_elem_front(t_param *param_ptr);
 
 #endif

@@ -15,27 +15,37 @@ void    del_all_elem(t_elem *elem)
     }
 }
 
-void    free_all(t_param *param)
+void    free_2D_array(char ***ptr)
 {
     int i;
 
+    i = 0;
+    while ((*ptr)[i])
+    {
+        free((*ptr)[i]);
+        i++;
+    }
+    free(*ptr);
+    *ptr = NULL;
+}
+
+void    free_all(t_param *param)
+{
     if (param->line)
     {
         printf("There is a line, the line is: |%s|\n", param->line);
         free(param->line);
         printf("Parameter 'Line' freed\n");
     }
-    i = 0;
     if (param->line_split)
     {
-        while (param->line_split[i])
-        {
-            free(param->line_split[i]);
-            printf("Line split element |%d| freed\n", i);
-            i++;
-        }
-        free(param->line_split);
-        printf("Parameter 'Line split' freed\n");
+        free_2D_array(&(param->line_split));
+        printf("Line split freed\n");
+    }
+    if (param->extra_split)
+    {
+        free_2D_array(&(param->extra_split));
+        printf("Extra split freed\n");
     }
     if (param->elem)
         del_all_elem(param->elem);

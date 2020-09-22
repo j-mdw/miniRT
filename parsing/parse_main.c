@@ -3,17 +3,24 @@
 #define	FILE_EXTANSION	".rt"
 #define	FLAG "--save"
 
+
+void	param_struct_init(t_param *param_ptr)
+{
+	param_ptr->save = 0;
+	param_ptr->res_found = 0;
+	param_ptr->amb_light_found = 0;
+	param_ptr->line = NULL;
+	param_ptr->line_split = NULL;
+	param_ptr->elem = NULL;
+	param_ptr->extra_split = NULL;
+}
+
 int	main(int argc, char **argv)
 {
 	int			fd;
 	t_param		params;
 
-	/* Initializing structure, eventually, to be moved to a separate function */
-	params.save = 0;
-	params.line = NULL;
-	params.line_split = NULL;
-	params.elem = NULL;
-	
+	param_struct_init(&params);
 	/* Checking for Flag and ensuring proper number of arguments are used */
 	if (argc != 2)
 	{
@@ -39,8 +46,9 @@ int	main(int argc, char **argv)
 	}
 	ft_putstr_fd("File Open\n", 1);
 	parse_params(&params, fd);
-//	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
+	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
 	printf("Light ratio: %f\n", params.light_ratio);
+	printf("Light RGB is: %#x\n", params.light_rgb);
 	free_all(&params);
 	return (0);
 }
