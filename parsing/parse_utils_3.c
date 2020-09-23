@@ -1,7 +1,7 @@
 #include "minirt.h"
 
 void
-    *add_new_elem_front(t_param *param_ptr)
+    add_new_elem_front(t_param *param_ptr)
 {
 	t_elem *new_elem;
 

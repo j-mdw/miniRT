@@ -21,7 +21,6 @@ int	main(int argc, char **argv)
 	t_param		params;
 
 	param_struct_init(&params);
-	/* Checking for Flag and ensuring proper number of arguments are used */
 	if (argc != 2)
 	{
 		if (argc == 3 && !(ft_strcmp(argv[2], FLAG)))
@@ -49,6 +48,8 @@ int	main(int argc, char **argv)
 	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
 	printf("Light ratio: %f\n", params.light_ratio);
 	printf("Light RGB is: %#x\n", params.light_rgb);
+	t_camera *cam_ptr = params.elem->object;
+	printf("Camera inputs:\ncoordinates:|%f|%f|%f|\norient_vector: |%f|%f|%f|\nFOV: %d\n", cam_ptr->coord[0], cam_ptr->coord[1], cam_ptr->coord[2], cam_ptr->orient[0], cam_ptr->orient[1], cam_ptr->orient[2], cam_ptr->fov);
 	free_all(&params);
 	return (0);
 }

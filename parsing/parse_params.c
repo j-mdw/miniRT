@@ -9,7 +9,12 @@ void
 
 void
     parse_resolution(t_param *param_ptr)
-{
+{       
+    printf("R found\n"); /* TBR */
+    if (param_ptr->res_found)
+        error_free(param_ptr, "Resolution provided multiple times");
+    else
+        param_ptr->res_found = 1;
     if (array_size(param_ptr->line_split) != 3)
         error_free(param_ptr, "Incorrect number of arguments for Resolution");
     else
@@ -28,6 +33,11 @@ void
 void
     parse_light(t_param *param_ptr)
 {
+    printf("A found\n"); /* TBR */
+    if (param_ptr->amb_light_found)
+        error_free(param_ptr, "Ambiant light provided multiple times");
+    else
+        param_ptr->amb_light_found = 1;
     if (array_size(param_ptr->line_split) != 3)
         error_free(param_ptr, "Incorrect number of arguments for Ambiant light");
     else
@@ -42,48 +52,43 @@ void
 void
 	parse_camera(t_param *param_ptr)
 {
-	if (array_size(param_ptr->line) != 4)
+    t_camera    *cam_ptr;
+    int         i;
+
+	if (array_size(param_ptr->line_split) != 4)
 		error_free(param_ptr, "Incorrect number of arguments for Camera");
 	add_new_elem_front(param_ptr);
 	param_ptr->elem->id = camera;
-	param_ptr->elem_index = camera;
-	param_ptr->elem->object = (t_camera *)malloc(sizeof(t_camera));
-//	param_ptr->elem->object-> ONGOING
-
-
-
+    cam_ptr = (t_camera *)malloc(sizeof(t_camera));
+	param_ptr->elem->object = cam_ptr;
+    get_coord(param_ptr->line_split[1], cam_ptr->coord, param_ptr, 3);
+    get_coord(param_ptr->line_split[2], cam_ptr->orient, param_ptr, 3);
+    i = 0;
+    while (i < 3)
+    {
+        if (cam_ptr->orient[i] < -1.0 || cam_ptr->orient[i] > 1.0)
+            error_free(param_ptr, "Orientation vector values out of [-1,1] range");  
+        i++;
+    }
+    if ((ft_isnumber(param_ptr->line_split[3])))
+    {
+        cam_ptr->fov = ft_atoi(param_ptr->line_split[3]);
+        if (cam_ptr->fov < 0 || cam_ptr->fov >180)
+            error_free(param_ptr, "Camera FOV not in range [0,180]");
+    }
+    else
+        error_free(param_ptr, "Camera FOV not a number");
 }
 
 void
     get_id(t_param *param_ptr)
 { 
     if (!ft_strcmp(*param_ptr->line_split, "R"))
-    {
-        printf("R found\n");
-        if (param_ptr->res_found)
-            error_free(param_ptr, "Resolution provided multiple times");
-        else
-        {
-            parse_resolution(param_ptr);
-            param_ptr->res_found = 1;
-        }
-    }
+        parse_resolution(param_ptr);
     else if (!ft_strcmp(*param_ptr->line_split, "A"))
-    {
-        printf("A found\n");
-        if (param_ptr->amb_light_found)
-            error_free(param_ptr, "Ambiant light provided multiple times");
-        else
-        {
-            parse_light(param_ptr);
-            param_ptr->amb_light_found = 1;
-			parse_camera(param_ptr);
-        }
-    }
+        parse_light(param_ptr);
 	else if (!ft_strcmp(*param_ptr->line_split, "c"))
-	{
-
-	}
+	    parse_camera(param_ptr);
     else
         error_free(param_ptr, "Incorrect identifier (from Get_ID)");
 }

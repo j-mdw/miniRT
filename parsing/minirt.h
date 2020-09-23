@@ -22,12 +22,8 @@ typedef enum {
 }	e_elements;
 
 typedef	struct	s_camera {
-	float		x;
-	float		y;
-	float		z;
-	float		orient_x;
-	float		orient_y;
-	float		orient_z;
+	float		coord[3];
+	float		orient[3];
 	int			fov;
 }	t_camera;
 
@@ -114,6 +110,9 @@ typedef	struct	s_param {
 	e_elements	*elem_index;
 }	t_param;
 
+typedef void (*f_parse_funct)(t_param *);
+
+
 int	ft_strcmp(const char *s1, const char *s2);
 int	check_file_extansion(char *filename, char *file_extansion);
 int 	ft_isblank(int c);
@@ -126,6 +125,8 @@ int		ft_isnumber(char *s);
 int		array_size(char **arr_ptr);
 float   atoitof(t_param *param_ptr, char *s);
 int		get_rgb(t_param *param_ptr, char *s);
-void	*add_new_elem_front(t_param *param_ptr);
+void	add_new_elem_front(t_param *param_ptr);
+void    free_2D_array(char ***ptr);
+void	get_coord(char *s, float arr[], t_param *param_ptr, int size);
 
 #endif
