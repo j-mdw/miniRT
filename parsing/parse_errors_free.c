@@ -9,6 +9,7 @@ void    del_all_elem(t_elem *elem)
     {
         store = elem;
         elem = elem->next_elem;
+        free(store->object);
         free(store);
         i++;
         printf("Element |%d| freed", i);

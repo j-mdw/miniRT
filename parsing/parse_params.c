@@ -109,6 +109,9 @@ int
             if ((param_ptr->line_split[0])) /* Checking if *line_split != NULL - this would happen if line was only white spaces */
                 get_id(param_ptr);
         }
+        if (param_ptr->line_split)
+            free_2D_array(&param_ptr->line_split);
+        free(param_ptr->line);
     }
     printf("GNL RETURN: %d\n", gnl);
     return (1);
