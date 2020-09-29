@@ -114,5 +114,9 @@ int
         free(param_ptr->line);
     }
     printf("GNL RETURN: %d\n", gnl);
+    if (gnl < 0)
+        error_free(param_ptr, "Could not read file");
+    if (!(param_ptr->res_found) || !(param_ptr->amb_light_found))
+        error_free(param_ptr, "Missing necessary parameter Resolution or Ambiant Light");
     return (1);
 }

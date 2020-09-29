@@ -32,7 +32,10 @@ float   atoitof(t_param *param_ptr, char *s)
     sign = 1;
     i = 0;
     if (s[i] == '-')
-        sign = sign * -1 + i++; /* i++ here to save lines */
+    {
+        sign = sign * -1;  /* i++ here to save lines */
+        s++;
+    }
     while (ft_isdigit(s[i]))
         i++;
     if (s[i] == '.' && ft_isdigit(s[i + 1]) && s[i + 2] == '\0')
@@ -41,13 +44,10 @@ float   atoitof(t_param *param_ptr, char *s)
         result = result * 10 + s[i + 1] - '0';
         return (((float)result) / 10 * sign);
     }
-    else if (s[i] == '\0')
+    if (s[i] == '\0')
         return ((float)(result = ft_atoi(s) * sign));
-    else
-    {
-        error_free(param_ptr, "Wrong format of floating point value");
-        return (0.0f);
-    }
+    error_free(param_ptr, "Wrong format of floating point value");
+    return (0.0f);
 }
 
 int
