@@ -1,12 +1,5 @@
 #include "minirt.h"
 
-/*
-void
-    get_coordinates(t_param *param_ptr);
-*/
-/* Checks if a string is of form "digits.digit", and then converts it to float */
-
-
 void
     parse_resolution(t_param *param_ptr)
 {       
@@ -31,7 +24,7 @@ void
 }
 
 void
-    parse_light(t_param *param_ptr)
+    parse_amb_light(t_param *param_ptr)
 {
     printf("A found\n"); /* TBR */
     if (param_ptr->amb_light_found)
@@ -81,14 +74,39 @@ void
 }
 
 void
+	parse_light(t_param *param_ptr)
+{
+    t_light    *light_ptr;
+
+	if (array_size(param_ptr->line_split) != 4)
+		error_free(param_ptr, "Incorrect number of arguments for Light");
+	add_new_elem_front(param_ptr);
+	param_ptr->elem->id = light;
+    light_ptr = (t_light *)malloc(sizeof(t_light));
+	param_ptr->elem->object = light_ptr;
+    get_coord(param_ptr->line_split[1], light_ptr->coord, param_ptr, 3);
+    if ((ft_isnumber(param_ptr->line_split[2])))
+    {
+        light_ptr->brightness = ft_atoi(param_ptr->line_split[2]);
+        if (light_ptr->brightness < 0.0 || light_ptr->brightness > 1.0)
+            error_free(param_ptr, "Light brightness not in range [0.0,1.0]");
+    }
+    else
+        error_free(param_ptr, "Light brightness not a number");
+    light_ptr->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
+}
+
+void
     get_id(t_param *param_ptr)
 { 
     if (!ft_strcmp(*param_ptr->line_split, "R"))
         parse_resolution(param_ptr);
     else if (!ft_strcmp(*param_ptr->line_split, "A"))
-        parse_light(param_ptr);
+        parse_amb_light(param_ptr);
 	else if (!ft_strcmp(*param_ptr->line_split, "c"))
 	    parse_camera(param_ptr);
+    else if (!ft_strcmp(*param_ptr->line_split, "l"))
+        parse_light(param_ptr);
     else
         error_free(param_ptr, "Incorrect identifier (from Get_ID)");
 }
@@ -104,7 +122,7 @@ int
         replace_char(param_ptr->line, '\t', ' ');
         if (param_ptr->line[0]) /* Checking if line is not '\0' which corresponds to an empty line in the file */
         {
-            if (!(param_ptr->line_split = ft_split(param_ptr->line, ' ')))
+        if (!(param_ptr->line_split = ft_split(param_ptr->line, ' ')))
                 error_free(param_ptr, "Split Error");
             if ((param_ptr->line_split[0])) /* Checking if *line_split != NULL - this would happen if line was only white spaces */
                 get_id(param_ptr);

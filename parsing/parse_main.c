@@ -48,13 +48,13 @@ int	main(int argc, char **argv)
 	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
 	printf("Light ratio: %f\n", params.light_ratio);
 	printf("Light RGB is: %#x\n", params.light_rgb);
-	t_camera *cam_ptr;
+/*	t_camera *cam_ptr;*/
 	t_param *param_ptr;
 	param_ptr = &params;
 	while (param_ptr->elem)
 	{
-		cam_ptr = param_ptr->elem->object;
-		printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", cam_ptr->coord[0], cam_ptr->coord[1], cam_ptr->coord[2], cam_ptr->orient[0], cam_ptr->orient[1], cam_ptr->orient[2], cam_ptr->fov);
+		if (param_ptr->elem->id == camera)
+			printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", ((t_camera *)param_ptr->elem->object)->coord[0], ((t_camera *)param_ptr->elem->object)->coord[1], ((t_camera *)param_ptr->elem->object)->coord[2], ((t_camera *)param_ptr->elem->object)->orient[0], ((t_camera *)param_ptr->elem->object)->orient[1], ((t_camera *)param_ptr->elem->object)->orient[2], ((t_camera *)param_ptr->elem->object)->fov);
 		param_ptr->elem = param_ptr->elem->next_elem;
 	}
 	free_all(&params);
