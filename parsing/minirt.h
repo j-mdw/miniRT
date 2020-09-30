@@ -21,6 +21,19 @@ typedef enum {
 				triangle,
 }	e_elements;
 
+typedef struct s_object {
+	int				obj_id;
+	float			coord1[3];
+	float			coord2[3];
+	float			coord3[3];
+	float			diameter;
+	float			brightness;
+	float			height;
+	int				rgb;
+	int				fov;
+	struct s_object	*next_object;
+}	t_object;
+
 typedef	struct	s_camera {
 	float		coord[3];
 	float		orient[3];
@@ -104,8 +117,10 @@ typedef	struct	s_param {
 	char		*line;
 	char		**line_split;
 	char		**extra_split;
-	t_elem		*elem;
+/*	t_elem		*elem; */
 	e_elements	*elem_index;
+	t_object	*object;
+
 }	t_param;
 
 typedef void (*f_parse_funct)(t_param *);

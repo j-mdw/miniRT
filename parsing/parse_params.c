@@ -45,7 +45,7 @@ void
 void
 	parse_camera(t_param *param_ptr)
 {
-    t_camera    *cam_ptr;
+/*    t_camera    *cam_ptr;
     int         i;
 
 	if (array_size(param_ptr->line_split) != 4)
@@ -70,30 +70,59 @@ void
             error_free(param_ptr, "Camera FOV not in range [0,180]");
     }
     else
+        error_free(param_ptr, "Camera FOV not a number"); */
+    int         i;
+
+	if (array_size(param_ptr->line_split) != 4)
+		error_free(param_ptr, "Incorrect number of arguments for Camera");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = camera;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    get_coord(param_ptr->line_split[2], param_ptr->object->coord2, param_ptr, 3);
+    i = 0;
+    while (i < 3)
+    {
+        if (param_ptr->object->coord2[i] < -1.0 || param_ptr->object->coord2[i] > 1.0)
+            error_free(param_ptr, "Orientation vector values out of [-1,1] range");  
+        i++;
+    }
+    if ((ft_isnumber(param_ptr->line_split[3])))
+    {
+        param_ptr->object->fov = ft_atoi(param_ptr->line_split[3]);
+        if (param_ptr->object->fov < 0 || param_ptr->object->fov >180)
+            error_free(param_ptr, "Camera FOV not in range [0,180]");
+    }
+    else
         error_free(param_ptr, "Camera FOV not a number");
 }
 
 void
 	parse_light(t_param *param_ptr)
-{
+{/*
     t_light    *light_ptr;
 
 	if (array_size(param_ptr->line_split) != 4)
 		error_free(param_ptr, "Incorrect number of arguments for Light");
 	add_new_elem_front(param_ptr);
 	param_ptr->elem->id = light;
-    light_ptr = (t_light *)malloc(sizeof(t_light));
-	param_ptr->elem->object = light_ptr;
+    if (!(light_ptr = (t_light *)malloc(sizeof(t_light))))
+        error_free(param_ptr, "Malloc error in 'parse_light'");
+    param_ptr->elem->object = light_ptr;
     get_coord(param_ptr->line_split[1], light_ptr->coord, param_ptr, 3);
-    if ((ft_isnumber(param_ptr->line_split[2])))
-    {
-        light_ptr->brightness = ft_atoi(param_ptr->line_split[2]);
-        if (light_ptr->brightness < 0.0 || light_ptr->brightness > 1.0)
-            error_free(param_ptr, "Light brightness not in range [0.0,1.0]");
-    }
-    else
-        error_free(param_ptr, "Light brightness not a number");
+    light_ptr->brightness = atoitof(param_ptr, param_ptr->line_split[2]);
+    if (light_ptr->brightness < 0.0 || light_ptr->brightness > 1.0)
+        error_free(param_ptr, "Light brightness not in range [0.0,1.0]");
     light_ptr->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
+    */
+	if (array_size(param_ptr->line_split) != 4)
+		error_free(param_ptr, "Incorrect number of arguments for Light");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = light;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    param_ptr->object->brightness = atoitof(param_ptr, param_ptr->line_split[2]);
+    if (param_ptr->object->brightness < 0.0 || param_ptr->object->brightness > 1.0)
+        error_free(param_ptr, "Light brightness not in range [0.0,1.0]");
+    param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
 }
 
 void
@@ -122,7 +151,7 @@ int
         replace_char(param_ptr->line, '\t', ' ');
         if (param_ptr->line[0]) /* Checking if line is not '\0' which corresponds to an empty line in the file */
         {
-        if (!(param_ptr->line_split = ft_split(param_ptr->line, ' ')))
+            if (!(param_ptr->line_split = ft_split(param_ptr->line, ' ')))
                 error_free(param_ptr, "Split Error");
             if ((param_ptr->line_split[0])) /* Checking if *line_split != NULL - this would happen if line was only white spaces */
                 get_id(param_ptr);

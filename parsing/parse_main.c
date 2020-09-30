@@ -11,7 +11,7 @@ void	param_struct_init(t_param *param_ptr)
 	param_ptr->amb_light_found = 0;
 	param_ptr->line = NULL;
 	param_ptr->line_split = NULL;
-	param_ptr->elem = NULL;
+	param_ptr->object = NULL;
 	param_ptr->extra_split = NULL;
 }
 
@@ -19,6 +19,7 @@ int	main(int argc, char **argv)
 {
 	int			fd;
 	t_param		params;
+	t_object	*object_ptr; /* for iteration the linked list for testing */
 
 	param_struct_init(&params);
 	if (argc != 2)
@@ -48,14 +49,14 @@ int	main(int argc, char **argv)
 	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
 	printf("Light ratio: %f\n", params.light_ratio);
 	printf("Light RGB is: %#x\n", params.light_rgb);
-/*	t_camera *cam_ptr;*/
-	t_param *param_ptr;
-	param_ptr = &params;
-	while (param_ptr->elem)
+	object_ptr = params.object;
+	while (object_ptr)
 	{
-		if (param_ptr->elem->id == camera)
-			printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", ((t_camera *)param_ptr->elem->object)->coord[0], ((t_camera *)param_ptr->elem->object)->coord[1], ((t_camera *)param_ptr->elem->object)->coord[2], ((t_camera *)param_ptr->elem->object)->orient[0], ((t_camera *)param_ptr->elem->object)->orient[1], ((t_camera *)param_ptr->elem->object)->orient[2], ((t_camera *)param_ptr->elem->object)->fov);
-		param_ptr->elem = param_ptr->elem->next_elem;
+		if (object_ptr->obj_id == camera)
+			printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->fov);
+		else if (object_ptr->obj_id == light)
+			printf("Light inputs:\ncoordinates |%f|%f|%f|\nRatio |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->brightness, object_ptr->rgb);
+		object_ptr = object_ptr->next_object;
 	}
 	free_all(&params);
 	return (0);

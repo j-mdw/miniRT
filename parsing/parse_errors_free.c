@@ -1,18 +1,17 @@
 #include "minirt.h"
 
-void    del_all_elem(t_elem *elem)
+void    del_all_elem(t_object *object_ptr)
 {
-    t_elem  *store;
+    t_object  *store;
     int i = 0; /* For debugging purposes, remove at end */
 
-    while(elem)
+    while(object_ptr)
     {
-        store = elem;
-        elem = elem->next_elem;
-        free(store->object);
+        store = object_ptr;
+        object_ptr = object_ptr->next_object;
         free(store);
         i++;
-        printf("Element |%d| freed", i);
+        printf("Element |%d| freed\t", i);
     }
 }
 
@@ -48,8 +47,8 @@ void    free_all(t_param *param)
         free_2D_array(&(param->extra_split));
         printf("Extra split freed\n");
     }
-    if (param->elem)
-        del_all_elem(param->elem);
+    if (param->object)
+        del_all_elem(param->object);
     printf("End of Free_All function\n");
 }
 
