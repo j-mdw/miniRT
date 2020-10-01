@@ -1,22 +1,21 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_main.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/01 18:12:39 by jmaydew           #+#    #+#             */
-/*   Updated: 2020/10/01 18:12:44 by jmaydew          ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 parse_main.c										:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: jmaydew <marvin@42.fr>						+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2020/10/01 18:12:39 by jmaydew		   #+#	  #+#			  */
+/*	 Updated: 2020/10/01 18:12:44 by jmaydew		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-#define	FILE_EXTANSION	".rt"
+#define	FILE_EXTANSION ".rt"
 #define	FLAG "--save"
 
-
-void	param_struct_init(t_param *param_ptr)
+void
+	param_struct_init(t_param *param_ptr)
 {
 	param_ptr->save = 0;
 	param_ptr->res_found = 0;
@@ -30,8 +29,8 @@ void	param_struct_init(t_param *param_ptr)
 void
 	display_parameters(t_param *param_ptr)
 {
-	t_object	*object_ptr; /* for iteration the linked list for testing */
-	
+	t_object	*object_ptr;
+
 	printf("Resoultion parameters: |x: %d|y: %d|\n", param_ptr->res_x, param_ptr->res_y);
 	printf("Light ratio: %f\n", param_ptr->light_ratio);
 	printf("Light RGB is: %#x\n", param_ptr->light_rgb);
@@ -60,7 +59,6 @@ int	main(int argc, char **argv)
 {
 	int			fd;
 	t_param		params;
-
 
 	param_struct_init(&params);
 	if (argc != 2)

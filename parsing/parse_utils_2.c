@@ -36,7 +36,7 @@ int
 }
 
 float
-	atoitof(t_param *param_ptr, char *s)
+	atoitof(t_param *p_ptr, char *s)
 {
 	int result;
 	int i;
@@ -60,54 +60,54 @@ float
 	}
 	if (s[i] == '\0')
 		return ((float)(result = ft_atoi(s) * sign));
-	error_free(param_ptr, "Wrong format of floating point value");
+	error_free(p_ptr, "Wrong format of floating point value");
 	return (0.0f);
 }
 
 int
-	get_rgb(t_param *param_ptr, char *s)
+	get_rgb(t_param *p_ptr, char *s)
 {
 	int		i;
 	int		store;
 	int		rgb;
 
-	if (!(param_ptr->extra_split = ft_split(s, ',')))
-		error_free(param_ptr, "Split error in get_rgb function");
-	if (array_size(param_ptr->extra_split) != 3)
-		error_free(param_ptr, "Incorrect number of RGB parameters");
+	if (!(p_ptr->extra_split = ft_split(s, ',')))
+		error_free(p_ptr, "Split error in get_rgb function");
+	if (array_size(p_ptr->extra_split) != 3)
+		error_free(p_ptr, "Incorrect number of RGB parameters");
 	rgb = 0;
 	i = 0;
-	while (param_ptr->extra_split[i])
+	while (p_ptr->extra_split[i])
 	{
-		if (!(ft_isnumber(param_ptr->extra_split[i])))
-			error_free(param_ptr, "Incorrect entries in rgb");
+		if (!(ft_isnumber(p_ptr->extra_split[i])))
+			error_free(p_ptr, "Incorrect entries in rgb");
 		else
 		{
-			store = ft_atoi(param_ptr->extra_split[i]);
+			store = ft_atoi(p_ptr->extra_split[i]);
 			if (store >= 0 && store <= 255 && ++i)
 				rgb = (rgb << 8) + store;
 			else
-				error_free(param_ptr, "RGB value out of 0-255 range");
+				error_free(p_ptr, "RGB value out of 0-255 range");
 		}
 	}
-	free_2d_array(&param_ptr->extra_split);
+	free_2d_array(&p_ptr->extra_split);
 	return (rgb);
 }
 
 void
-	get_coord(char *s, float arr[], t_param *param_ptr, int size)
+	get_coord(char *s, float arr[], t_param *p_ptr, int size)
 {
 	int i;
 
-	if (!(param_ptr->extra_split = ft_split(s, ',')))
-		error_free(param_ptr, "Split error in 'get_coord' function");
-	if (array_size(param_ptr->extra_split) != size)
-		error_free(param_ptr, "Incorrect number of coordinates parameters");
+	if (!(p_ptr->extra_split = ft_split(s, ',')))
+		error_free(p_ptr, "Split error in 'get_coord' function");
+	if (array_size(p_ptr->extra_split) != size)
+		error_free(p_ptr, "Incorrect number of coordinates parameters");
 	i = 0;
 	while (i < size)
 	{
-		arr[i] = atoitof(param_ptr, param_ptr->extra_split[i]);
+		arr[i] = atoitof(p_ptr, p_ptr->extra_split[i]);
 		i++;
 	}
-	free_2d_array(&param_ptr->extra_split);
+	free_2d_array(&p_ptr->extra_split);
 }

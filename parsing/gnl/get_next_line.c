@@ -20,18 +20,18 @@ int	ft_gnl(char **line, char *buffer)
 	char *ptr;
 	char *new_line;
 
-	if ((ptr = ft_strchr(buffer, '\n')) != NULL)
+	if ((ptr = gnl_strchr(buffer, '\n')) != NULL)
 	{
 		*ptr = '\0';
-		new_line = ft_strjoin(*line, buffer);
+		new_line = gnl_strjoin(*line, buffer);
 		free(*line);
 		*line = new_line;
-		ft_my_strcpy(buffer, ptr + 1);
+		gnl_strcpy(buffer, ptr + 1);
 		return (1);
 	}
 	else
 	{
-		new_line = ft_strjoin(*line, buffer);
+		new_line = gnl_strjoin(*line, buffer);
 		free(*line);
 		*line = new_line;
 		buffer[0] = '\0';

@@ -76,5 +76,13 @@ int				get_rgb(t_param *param_ptr, char *s);
 void			add_new_elem_front(t_param *param_ptr);
 void			free_2d_array(char ***ptr);
 void			get_coord(char *s, float arr[], t_param *param_ptr, int size);
-
+void			parse_resolution(t_param *param_ptr);
+void			parse_amb_light(t_param *param_ptr);
+void			parse_camera(t_param *param_ptr);
+void			parse_light(t_param *param_ptr);
+void			parse_sphere(t_param *param_ptr);
+void			parse_plane(t_param *param_ptr);
+void			parse_square(t_param *param_ptr);
+void			parse_cylinder(t_param *param_ptr);
+void			parse_triangle(t_param *param_ptr);
 #endif
