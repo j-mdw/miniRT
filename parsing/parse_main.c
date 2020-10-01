@@ -15,11 +15,40 @@ void	param_struct_init(t_param *param_ptr)
 	param_ptr->extra_split = NULL;
 }
 
+void
+	display_parameters(t_param *param_ptr)
+{
+	t_object	*object_ptr; /* for iteration the linked list for testing */
+	
+	printf("Resoultion parameters: |x: %d|y: %d|\n", param_ptr->res_x, param_ptr->res_y);
+	printf("Light ratio: %f\n", param_ptr->light_ratio);
+	printf("Light RGB is: %#x\n", param_ptr->light_rgb);
+	object_ptr = param_ptr->object;
+	while (object_ptr)
+	{
+		if (object_ptr->obj_id == camera)
+			printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->fov);
+		else if (object_ptr->obj_id == light)
+			printf("Light inputs:\ncoordinates |%f|%f|%f|\nRatio |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->brightness, object_ptr->rgb);
+		else if (object_ptr->obj_id == sphere)
+			printf("Sphere inputs:\ncoordinates |%f|%f|%f|\nDiameter |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->diameter, object_ptr->rgb);
+		else if (object_ptr->obj_id == plane)
+			printf("Plane inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->rgb);
+		else if (object_ptr->obj_id == square)
+			printf("Square inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nHeight |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->height, object_ptr->rgb);
+		else if (object_ptr->obj_id == cylinder)
+			printf("Cylinder inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nRgb |%#x|\nDiameter |%f|\nHeight |%f|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->rgb, object_ptr->diameter, object_ptr->height);
+		else if (object_ptr->obj_id == triangle)
+			printf("Triangle inputs:\ncoordinates1 |%f|%f|%f|\nCoordinates2 |%f|%f|%f|\nCoordinates3 |%f|%f|%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->coord3[0], object_ptr->coord3[1], object_ptr->coord3[2], object_ptr->rgb);
+		object_ptr = object_ptr->next_object;
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	int			fd;
 	t_param		params;
-	t_object	*object_ptr; /* for iteration the linked list for testing */
+
 
 	param_struct_init(&params);
 	if (argc != 2)
@@ -46,18 +75,7 @@ int	main(int argc, char **argv)
 	}
 	ft_putstr_fd("File Open\n", 1);
 	parse_params(&params, fd);
-	printf("Resoultion parameters: |x: %d|y: %d|\n", params.res_x, params.res_y);
-	printf("Light ratio: %f\n", params.light_ratio);
-	printf("Light RGB is: %#x\n", params.light_rgb);
-	object_ptr = params.object;
-	while (object_ptr)
-	{
-		if (object_ptr->obj_id == camera)
-			printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->fov);
-		else if (object_ptr->obj_id == light)
-			printf("Light inputs:\ncoordinates |%f|%f|%f|\nRatio |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->brightness, object_ptr->rgb);
-		object_ptr = object_ptr->next_object;
-	}
+	display_parameters(&params);
 	free_all(&params);
 	return (0);
 }

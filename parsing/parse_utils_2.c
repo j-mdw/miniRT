@@ -92,8 +92,8 @@ void
     i = 0;
     while (i < size)
     {
-            arr[i] = atoitof(param_ptr, param_ptr->extra_split[i]);
-            i++;
+        arr[i] = atoitof(param_ptr, param_ptr->extra_split[i]);
+        i++;
     }
     free_2D_array(&param_ptr->extra_split);
 }

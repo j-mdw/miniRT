@@ -19,7 +19,7 @@ typedef enum {
 				square,
 				cylinder,
 				triangle,
-}	e_elements;
+}	e_objects;
 
 typedef struct s_object {
 	int				obj_id;
@@ -34,78 +34,6 @@ typedef struct s_object {
 	struct s_object	*next_object;
 }	t_object;
 
-typedef	struct	s_camera {
-	float		coord[3];
-	float		orient[3];
-	int			fov;
-}	t_camera;
-
-typedef struct s_light {
-	float		coord[3];
-	float		brightness;
-	int			rgb;
-}	t_light;
-
-typedef	struct s_sphere {
-	float		x;
-	float		y;
-	float		z;
-	float		diameter;
-	int			rgb;
-}	t_sphere;
-
-typedef	struct s_plane {
-	float	x;
-	float	y;
-	float	z;
-	float	orient_x;
-	float	orient_y;
-	float	orient_z;
-	int		rgb;
-}	t_plane;
-
-typedef	struct s_square {
-	float		x;
-	float		y;
-	float		z;
-	float		orient_x;
-	float		orient_y;
-	float		orient_z;
-	float		side_size;
-	int			rgb;
-}	t_square;
-
-typedef	struct s_cylinder {
-	float		x;
-	float		y;
-	float		z;
-	float		orient_x;
-	float		orient_y;
-	float		orient_z;
-	float		diameter;
-	float		height;
-	int			rgb;
-}	t_cylinder;
-
-typedef	struct s_triangle {
-	float		x1;
-	float		y1;
-	float		z1;
-	float		x2;
-	float		y2;
-	float		z2;	
-	float		x3;
-	float		y3;
-	float		z3;
-	int			rgb;
-}	t_triangle;
-
-typedef	struct	s_elem {
-	char			id;
-	void			*object;
-	struct	s_elem	*next_elem;
-}	t_elem;
-
 typedef	struct	s_param {
 	int			res_found;
 	int			amb_light_found;
@@ -117,14 +45,10 @@ typedef	struct	s_param {
 	char		*line;
 	char		**line_split;
 	char		**extra_split;
-/*	t_elem		*elem; */
-	e_elements	*elem_index;
+	e_objects	*elem_index;
 	t_object	*object;
 
 }	t_param;
-
-typedef void (*f_parse_funct)(t_param *);
-
 
 int	ft_strcmp(const char *s1, const char *s2);
 int	check_file_extansion(char *filename, char *file_extansion);

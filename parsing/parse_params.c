@@ -45,32 +45,6 @@ void
 void
 	parse_camera(t_param *param_ptr)
 {
-/*    t_camera    *cam_ptr;
-    int         i;
-
-	if (array_size(param_ptr->line_split) != 4)
-		error_free(param_ptr, "Incorrect number of arguments for Camera");
-	add_new_elem_front(param_ptr);
-	param_ptr->elem->id = camera;
-    cam_ptr = (t_camera *)malloc(sizeof(t_camera));
-	param_ptr->elem->object = cam_ptr;
-    get_coord(param_ptr->line_split[1], cam_ptr->coord, param_ptr, 3);
-    get_coord(param_ptr->line_split[2], cam_ptr->orient, param_ptr, 3);
-    i = 0;
-    while (i < 3)
-    {
-        if (cam_ptr->orient[i] < -1.0 || cam_ptr->orient[i] > 1.0)
-            error_free(param_ptr, "Orientation vector values out of [-1,1] range");  
-        i++;
-    }
-    if ((ft_isnumber(param_ptr->line_split[3])))
-    {
-        cam_ptr->fov = ft_atoi(param_ptr->line_split[3]);
-        if (cam_ptr->fov < 0 || cam_ptr->fov >180)
-            error_free(param_ptr, "Camera FOV not in range [0,180]");
-    }
-    else
-        error_free(param_ptr, "Camera FOV not a number"); */
     int         i;
 
 	if (array_size(param_ptr->line_split) != 4)
@@ -98,22 +72,7 @@ void
 
 void
 	parse_light(t_param *param_ptr)
-{/*
-    t_light    *light_ptr;
-
-	if (array_size(param_ptr->line_split) != 4)
-		error_free(param_ptr, "Incorrect number of arguments for Light");
-	add_new_elem_front(param_ptr);
-	param_ptr->elem->id = light;
-    if (!(light_ptr = (t_light *)malloc(sizeof(t_light))))
-        error_free(param_ptr, "Malloc error in 'parse_light'");
-    param_ptr->elem->object = light_ptr;
-    get_coord(param_ptr->line_split[1], light_ptr->coord, param_ptr, 3);
-    light_ptr->brightness = atoitof(param_ptr, param_ptr->line_split[2]);
-    if (light_ptr->brightness < 0.0 || light_ptr->brightness > 1.0)
-        error_free(param_ptr, "Light brightness not in range [0.0,1.0]");
-    light_ptr->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
-    */
+{
 	if (array_size(param_ptr->line_split) != 4)
 		error_free(param_ptr, "Incorrect number of arguments for Light");
 	add_new_elem_front(param_ptr);
@@ -123,6 +82,88 @@ void
     if (param_ptr->object->brightness < 0.0 || param_ptr->object->brightness > 1.0)
         error_free(param_ptr, "Light brightness not in range [0.0,1.0]");
     param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
+}
+
+void
+    parse_sphere(t_param *param_ptr)
+{
+	if (array_size(param_ptr->line_split) != 4)
+		error_free(param_ptr, "Incorrect number of arguments for Sphere");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = sphere;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    param_ptr->object->diameter = atoitof(param_ptr, param_ptr->line_split[2]);
+    param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
+}
+
+void
+    parse_plane(t_param *param_ptr)
+{
+    int i;
+	if (array_size(param_ptr->line_split) != 4)
+		error_free(param_ptr, "Incorrect number of arguments for Plane");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = plane;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    get_coord(param_ptr->line_split[2], param_ptr->object->coord2, param_ptr, 3);
+    i = 0;
+    while (param_ptr->object->coord2[i] >= -1.0 && param_ptr->object->coord2[i] <= 1.0 && i < 3)
+        i++;
+    if (i != 3)
+        error_free(param_ptr, "Orientation vector inputs not in range [-1,1]");
+    param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
+}
+
+void
+    parse_square(t_param *param_ptr)
+{
+    int i;
+	if (array_size(param_ptr->line_split) != 5)
+		error_free(param_ptr, "Incorrect number of arguments for Square");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = square;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    get_coord(param_ptr->line_split[2], param_ptr->object->coord2, param_ptr, 3);
+    i = 0;
+    while (param_ptr->object->coord2[i] >= -1.0 && param_ptr->object->coord2[i] <= 1.0 && i < 3)
+        i++;
+    if (i != 3)
+        error_free(param_ptr, "Orientation vector inputs not in range [-1,1]");
+    param_ptr->object->height = atoitof(param_ptr, param_ptr->line_split[3]);
+    param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[4]);
+}
+
+void
+    parse_cylinder(t_param *param_ptr)
+{
+    int i;
+	if (array_size(param_ptr->line_split) != 6)
+		error_free(param_ptr, "Incorrect number of arguments for Cylinder");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = cylinder;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    get_coord(param_ptr->line_split[2], param_ptr->object->coord2, param_ptr, 3);
+    i = 0;
+    while (param_ptr->object->coord2[i] >= -1.0 && param_ptr->object->coord2[i] <= 1.0 && i < 3)
+        i++;
+    if (i != 3)
+        error_free(param_ptr, "Orientation vector inputs not in range [-1,1]");
+    param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[3]);
+    param_ptr->object->diameter = atoitof(param_ptr, param_ptr->line_split[4]);
+    param_ptr->object->height = atoitof(param_ptr, param_ptr->line_split[5]);
+}
+
+void
+    parse_triangle(t_param *param_ptr)
+{
+	if (array_size(param_ptr->line_split) != 5)
+		error_free(param_ptr, "Incorrect number of arguments for Triangle");
+	add_new_elem_front(param_ptr);
+	param_ptr->object->obj_id = triangle;
+    get_coord(param_ptr->line_split[1], param_ptr->object->coord1, param_ptr, 3);
+    get_coord(param_ptr->line_split[2], param_ptr->object->coord2, param_ptr, 3);
+    get_coord(param_ptr->line_split[3], param_ptr->object->coord3, param_ptr, 3);
+    param_ptr->object->rgb = get_rgb(param_ptr, param_ptr->line_split[4]);
 }
 
 void
@@ -136,6 +177,16 @@ void
 	    parse_camera(param_ptr);
     else if (!ft_strcmp(*param_ptr->line_split, "l"))
         parse_light(param_ptr);
+    else if (!ft_strcmp(*param_ptr->line_split, "sp"))
+        parse_sphere(param_ptr);
+    else if (!ft_strcmp(*param_ptr->line_split, "pl"))
+        parse_plane(param_ptr);
+    else if (!ft_strcmp(*param_ptr->line_split, "sq"))
+        parse_square(param_ptr);
+    else if (!ft_strcmp(*param_ptr->line_split, "cy"))
+        parse_cylinder(param_ptr);
+    else if (!ft_strcmp(*param_ptr->line_split, "tr"))
+        parse_triangle(param_ptr);
     else
         error_free(param_ptr, "Incorrect identifier (from Get_ID)");
 }
