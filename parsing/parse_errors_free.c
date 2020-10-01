@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_errors_free.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/10/01 18:08:49 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/10/01 19:11:09 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 void    del_all_elem(t_object *object_ptr)
@@ -15,7 +27,7 @@ void    del_all_elem(t_object *object_ptr)
     }
 }
 
-void    free_2D_array(char ***ptr)
+void    free_2d_array(char ***ptr)
 {
     int i;
 
@@ -39,12 +51,12 @@ void    free_all(t_param *param)
     }
     if (param->line_split)
     {
-        free_2D_array(&(param->line_split));
+        free_2d_array(&(param->line_split));
         printf("Line split freed\n");
     }
     if (param->extra_split)
     {
-        free_2D_array(&(param->extra_split));
+        free_2d_array(&(param->extra_split));
         printf("Extra split freed\n");
     }
     if (param->object)

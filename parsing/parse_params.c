@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_params.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/10/01 18:13:07 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/10/01 19:13:49 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 void
@@ -208,7 +220,7 @@ int
                 get_id(param_ptr);
         }
         if (param_ptr->line_split)
-            free_2D_array(&param_ptr->line_split);
+            free_2d_array(&param_ptr->line_split);
         free(param_ptr->line);
     }
     printf("GNL RETURN: %d\n", gnl);
