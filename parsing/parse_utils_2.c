@@ -46,7 +46,7 @@ float
 	i = 0;
 	if (s[i] == '-')
 	{
-		sign = sign * -1;  
+		sign = sign * -1;
 		/* i++ here to save lines */
 		s++;
 	}
@@ -73,8 +73,10 @@ int
 
 	if (!(param_ptr->extra_split = ft_split(s, ',')))
 		error_free(param_ptr, "Split error in get_rgb function");
-	if (!(i = 0) && !(rgb = 0) && array_size(param_ptr->extra_split) != 3) /* Just saving lines here */
+	if (array_size(param_ptr->extra_split) != 3)
 		error_free(param_ptr, "Incorrect number of RGB parameters");
+	rgb = 0;
+	i = 0;
 	while (param_ptr->extra_split[i])
 	{
 		if (!(ft_isnumber(param_ptr->extra_split[i])))
@@ -83,16 +85,13 @@ int
 		{
 			store = ft_atoi(param_ptr->extra_split[i]);
 			if (store >= 0 && store <= 255 && ++i)
-			{
 				rgb = (rgb << 8) + store;
-			/*	rgb += store; */
-			}
 			else
 				error_free(param_ptr, "RGB value out of 0-255 range");
 		}
 	}
 	free_2d_array(&param_ptr->extra_split);
-	return(rgb);
+	return (rgb);
 }
 
 void
