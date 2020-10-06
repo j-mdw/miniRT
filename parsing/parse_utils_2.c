@@ -54,12 +54,12 @@ float
 		i++;
 	if (s[i] == '.' && ft_isdigit(s[i + 1]) && s[i + 2] == '\0')
 	{
-		result = ft_atoi(s);
+		result = minirt_atoi(s, p_ptr);
 		result = result * 10 + s[i + 1] - '0';
 		return (((float)result) / 10 * sign);
 	}
 	if (s[i] == '\0')
-		return ((float)(result = ft_atoi(s) * sign));
+		return ((float)(result = minirt_atoi(s, p_ptr) * sign));
 	error_free(p_ptr, "Wrong format of floating point value");
 	return (0.0f);
 }
@@ -83,7 +83,7 @@ int
 			error_free(p_ptr, "Incorrect entries in rgb");
 		else
 		{
-			store = ft_atoi(p_ptr->extra_split[i]);
+			store = minirt_atoi(p_ptr->extra_split[i], p_ptr);
 			if (store >= 0 && store <= 255 && ++i)
 				rgb = (rgb << 8) + store;
 			else

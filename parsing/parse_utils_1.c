@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include <limits.h>
+#include <stdio.h>
 
 int
 	ft_strcmp(const char *s1, const char *s2)
@@ -58,40 +59,30 @@ void
 }
 
 int
-	minirt_atoi(char *s)
-	{
-
-	}
-static int	ft_check_sign(char c)
+	minirt_atoi(char *s, t_param *p_ptr)
 {
-	if (c == '-')
-		return (-1);
-	else
-		return (1);
-}
+	int				i;
+	int				sign;
+	long long int	res;
+	int				max;
 
-int			ft_atoi(const char *str)
-{
-	int		i;
-	int		sign;
-	int		power;
-	double	res;
-
-	power = 0;
-	i = 0;
+	i = 1;
 	res = 0;
-	if ((sign = -1) && (*str == '-'))
-		str++;
-	else if (*str == '+')
-		str++;
-	while (str[power] <= '9' && str[power] >= '0')
-		power++;
-	while (i < power)
-	{
-		res = res * 10 + ((str[i] - 48));
-		if ((res * sign) >  INT_MAX || (res * sign) < INT_MAX)
-			return (-1);
+	max = INT_MAX;
+	while (max /= 10)
 		i++;
+	if ((sign = 1) && (*s == '-'))
+	{
+		s++;
+		sign = -1;
 	}
+	else if (*s == '+')
+		s++;
+	if (ft_strlen(s) > (unsigned int)i)
+		error_free(p_ptr, "Values larger/smaller than int size");
+	while ((*s >= '0') && (*s <= '9'))
+		res = res * 10 + *s++ - '0';
+	if (res * sign > INT_MAX || res * sign < INT_MIN)
+		error_free(p_ptr, "Values larger/smaller than int size");
 	return (res * sign);
 }

@@ -15,7 +15,6 @@
 void
 	parse_resolution(t_param *p_ptr)
 {
-	printf("R found\n"); /* TBR */
 	if (p_ptr->res_found)
 		error_free(p_ptr, "Resolution provided multiple times");
 	else
@@ -25,11 +24,11 @@ void
 	else
 	{
 		if (ft_isnumber(p_ptr->line_split[1]))
-			p_ptr->res_x = ft_atoi(p_ptr->line_split[1]);
+			p_ptr->res_x = minirt_atoi(p_ptr->line_split[1], p_ptr);
 		else
 			error_free(p_ptr, "Incorrect 'x' resolution value");
 		if (ft_isnumber(p_ptr->line_split[2]))
-			p_ptr->res_y = ft_atoi(p_ptr->line_split[2]);
+			p_ptr->res_y = minirt_atoi(p_ptr->line_split[2], p_ptr);
 		else
 			error_free(p_ptr, "Incorrect 'y' resolution value");
 	}
@@ -38,7 +37,6 @@ void
 void
 	parse_amb_light(t_param *p_ptr)
 {
-	printf("A found\n"); /* TBR */
 	if (p_ptr->amb_light_found)
 		error_free(p_ptr, "Ambiant light provided multiple times");
 	else
@@ -74,7 +72,7 @@ void
 	}
 	if ((ft_isnumber(p_ptr->line_split[3])))
 	{
-		p_ptr->object->fov = ft_atoi(p_ptr->line_split[3]);
+		p_ptr->object->fov = minirt_atoi(p_ptr->line_split[3], p_ptr);
 		if (p_ptr->object->fov < 0 || p_ptr->object->fov > 180)
 			error_free(p_ptr, "Camera FOV not in range [0,180]");
 	}
