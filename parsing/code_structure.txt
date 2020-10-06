@@ -19,3 +19,7 @@ Error handling:
     - Attempts to free the elements, the line * and the split ** (if they exist)
     - Printf an error message
     - Exits
+
+Pending Updates:
+- Change name object to 'surface' (in geometric optics, 'object' means anything from which light rays radiate)
+- Think of best solution to separate Cameras and Lights from elements linked-list
