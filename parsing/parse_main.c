@@ -86,6 +86,7 @@ int	main(int argc, char **argv)
 	ft_putstr_fd("File Open\n", 1);
 	parse_params(&params, fd);
 	display_parameters(&params);
+	ray_trace(&params);
 	free_all(&params);
 	return (0);
 }

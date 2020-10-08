@@ -49,7 +49,7 @@ void
 		i++;
 	if (i != 3)
 		error_free(p_ptr, "Orientation vector inputs not in range [-1,1]");
-	p_ptr->object->height = atoitof(p_ptr, p_ptr->line_split[3]);
+	p_ptr->object->height = atoitod(p_ptr, p_ptr->line_split[3]);
 	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[4]);
 }
 
@@ -71,8 +71,8 @@ void
 	if (i != 3)
 		error_free(p_ptr, "Orientation vector inputs not in range [-1,1]");
 	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[3]);
-	p_ptr->object->diameter = atoitof(p_ptr, p_ptr->line_split[4]);
-	p_ptr->object->height = atoitof(p_ptr, p_ptr->line_split[5]);
+	p_ptr->object->diameter = atoitod(p_ptr, p_ptr->line_split[4]);
+	p_ptr->object->height = atoitod(p_ptr, p_ptr->line_split[5]);
 }
 
 void

@@ -35,8 +35,8 @@ int
 	return (i);
 }
 
-float
-	atoitof(t_param *p_ptr, char *s)
+double
+	atoitod(t_param *p_ptr, char *s)
 {
 	int result;
 	int i;
@@ -56,10 +56,10 @@ float
 	{
 		result = minirt_atoi(s, p_ptr);
 		result = result * 10 + s[i + 1] - '0';
-		return (((float)result) / 10 * sign);
+		return (((double)result) / 10 * sign);
 	}
 	if (s[i] == '\0')
-		return ((float)(result = minirt_atoi(s, p_ptr) * sign));
+		return ((double)(result = minirt_atoi(s, p_ptr) * sign));
 	error_free(p_ptr, "Wrong format of floating point value");
 	return (0.0f);
 }
@@ -95,7 +95,7 @@ int
 }
 
 void
-	get_coord(char *s, float arr[], t_param *p_ptr, int size)
+	get_coord(char *s, double arr[], t_param *p_ptr, int size)
 {
 	int i;
 
@@ -106,7 +106,7 @@ void
 	i = 0;
 	while (i < size)
 	{
-		arr[i] = atoitof(p_ptr, p_ptr->extra_split[i]);
+		arr[i] = atoitod(p_ptr, p_ptr->extra_split[i]);
 		i++;
 	}
 	free_2d_array(&p_ptr->extra_split);

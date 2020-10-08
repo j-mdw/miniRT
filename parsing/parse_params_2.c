@@ -45,7 +45,7 @@ void
 		error_free(p_ptr, "Incorrect nb of arg for Ambiant light");
 	else
 	{
-		p_ptr->light_ratio = atoitof(p_ptr, p_ptr->line_split[1]);
+		p_ptr->light_ratio = atoitod(p_ptr, p_ptr->line_split[1]);
 		if (p_ptr->light_ratio > 1.0 || p_ptr->light_ratio < 0.0)
 			error_free(p_ptr, "Light ratio not in  [0.0,1.0]");
 		p_ptr->light_rgb = get_rgb(p_ptr, p_ptr->line_split[2]);
@@ -88,7 +88,7 @@ void
 	add_new_elem_front(p_ptr);
 	p_ptr->object->obj_id = light;
 	get_coord(p_ptr->line_split[1], p_ptr->object->coord1, p_ptr, 3);
-	p_ptr->object->brightness = atoitof(p_ptr, p_ptr->line_split[2]);
+	p_ptr->object->brightness = atoitod(p_ptr, p_ptr->line_split[2]);
 	if (p_ptr->object->brightness < 0.0 || p_ptr->object->brightness > 1.0)
 		error_free(p_ptr, "Light brightness not in [0.0,1.0]");
 	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[3]);
@@ -102,6 +102,6 @@ void
 	add_new_elem_front(p_ptr);
 	p_ptr->object->obj_id = sphere;
 	get_coord(p_ptr->line_split[1], p_ptr->object->coord1, p_ptr, 3);
-	p_ptr->object->diameter = atoitof(p_ptr, p_ptr->line_split[2]);
+	p_ptr->object->diameter = atoitod(p_ptr, p_ptr->line_split[2]);
 	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[3]);
 }
