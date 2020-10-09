@@ -70,11 +70,14 @@ void
 			error_free(p_ptr, "Orientation vector out of [-1,1] range");
 		i++;
 	}
+	if (p_ptr->object->coord2[0] == 0.0 && p_ptr->object->coord2[1] == 0.0 \
+	&& p_ptr->object->coord2[2] == 0.0)
+		error_free(p_ptr, "At least 1 coord. of cam. orient vec. must be != 0");
 	if ((ft_isnumber(p_ptr->line_split[3])))
 	{
 		p_ptr->object->fov = minirt_atoi(p_ptr->line_split[3], p_ptr);
-		if (p_ptr->object->fov < 0 || p_ptr->object->fov > 180)
-			error_free(p_ptr, "Camera FOV not in range [0,180]");
+		if (p_ptr->object->fov <= 0 || p_ptr->object->fov > 180)
+			error_free(p_ptr, "Camera FOV not in range ]0,180]");
 	}
 	else
 		error_free(p_ptr, "Camera FOV not a number");
@@ -103,5 +106,7 @@ void
 	p_ptr->object->obj_id = sphere;
 	get_coord(p_ptr->line_split[1], p_ptr->object->coord1, p_ptr, 3);
 	p_ptr->object->diameter = atoitod(p_ptr, p_ptr->line_split[2]);
+	if (p_ptr->object->diameter <= 0)
+		error_free(p_ptr, "Diameter must be greater than 0");
 	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[3]);
 }
