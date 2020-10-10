@@ -2,15 +2,15 @@
 #include "minilibx-linux/mlx_int.h"
 #include <stdio.h>
 
-typedef struct s_data {
+typedef struct s_pix_data {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}				t_data;
+}				t_pix_data;
 
-void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void            my_mlx_pixel_put(t_pix_data *data, int x, int y, int color)
 {
     char    *dst;
 
@@ -22,7 +22,7 @@ int	main(void)
 {
 	void	*mlx;
 	void	*mlx_win;
-	t_data	img;
+	t_pix_data	img;
 
 	if(!(mlx = mlx_init()))
 	{

@@ -76,8 +76,8 @@ void
 	if ((ft_isnumber(p_ptr->line_split[3])))
 	{
 		p_ptr->object->fov = minirt_atoi(p_ptr->line_split[3], p_ptr);
-		if (p_ptr->object->fov <= 0 || p_ptr->object->fov > 180)
-			error_free(p_ptr, "Camera FOV not in range ]0,180]");
+		if (p_ptr->object->fov <= 0 || p_ptr->object->fov >= 180)
+			error_free(p_ptr, "Camera FOV not in range ]0,180[");
 	}
 	else
 		error_free(p_ptr, "Camera FOV not a number");

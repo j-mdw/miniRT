@@ -15,6 +15,8 @@
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
+# include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -63,10 +65,17 @@ typedef	struct	s_param {
 }				t_param;
 
 typedef	struct	s_ray {
-	double	origin[3];
-	double	direction[3];
+	double		origin[3];
+	double		direction[3];
 }				t_ray;
 
+typedef struct s_pix_data {
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_pix_data;
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				check_file_extansion(char *filename, char *file_extansion);
@@ -93,5 +102,6 @@ void			parse_square(t_param *p_ptr);
 void			parse_cylinder(t_param *p_ptr);
 void			parse_triangle(t_param *p_ptr);
 int				minirt_atoi(char *s, t_param *p_ptr);
-int				ray_trace(t_param *p_ptr);
+int				ray_trace(t_param *p_ptr, t_pix_data *img_ptr);
+void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
 #endif

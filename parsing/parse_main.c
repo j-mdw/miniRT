@@ -59,6 +59,9 @@ int	main(int argc, char **argv)
 {
 	int			fd;
 	t_param		params;
+	void		*mlx;
+	void		*mlx_win;
+	t_pix_data	img;
 
 	param_struct_init(&params);
 	if (argc != 2)
@@ -71,8 +74,8 @@ int	main(int argc, char **argv)
 			return (-1);
 		}
 	}
-	params.light_ratio = 1.0; /* Useless, just to avoid errors at compile for now */
-	params.light_ratio += 1.0; /* Same */
+/**	params.light_ratio = 1.0;  Useless, just to avoid errors at compile for now 
+	params.light_ratio += 1.0;  Same */
 	if (!check_file_extansion(argv[1], FILE_EXTANSION))
 	{
 		ft_putstr_fd("Incorrect file extansion", 1);
@@ -83,10 +86,18 @@ int	main(int argc, char **argv)
 		ft_putstr_fd("Failed opening the file, please make sure the file exists\n", 1);
 		return (-1);
 	}
-	ft_putstr_fd("File Open\n", 1);
 	parse_params(&params, fd);
 	display_parameters(&params);
-	ray_trace(&params);
+	if(!(mlx = mlx_init()))
+		error_free(&params, "mlx_init failed");
+	mlx_win = mlx_new_window(mlx, params.res_x, params.res_y, "hello world");
+	img.img = mlx_new_image(mlx, params.res_x, params.res_y);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+
+	ray_trace(&params, &img);
+
+	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+	mlx_loop(mlx);
 	free_all(&params);
 	return (0);
 }
