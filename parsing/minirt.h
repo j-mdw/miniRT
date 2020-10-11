@@ -67,6 +67,9 @@ typedef	struct	s_param {
 typedef	struct	s_ray {
 	double		origin[3];
 	double		direction[3];
+	double		vec_u[3];
+	double		vec_v[3];
+	double		vec_w[3];
 }				t_ray;
 
 typedef struct s_pix_data {
