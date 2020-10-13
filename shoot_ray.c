@@ -154,7 +154,7 @@ void
     magnitude = vector_magnitude(cam_ptr->coord2, 3);
     while (i < 3)
     {
-        ray_ptr->vec_w[i] = cam_ptr->coord2[i] / magnitude; /*Copying normalized camera view point of vue in vec w and converting to a unit vector */
+        ray_ptr->vec_w[i] = cam_ptr->coord2[i] / magnitude; /*Copying camera view point in vec w and converting to a unit vector */
         i++;
     }
     ray_ptr->vec_v[0] = ray_ptr->vec_w[0];
