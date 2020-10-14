@@ -226,8 +226,6 @@ int
     vector_copy(ray_ptr->vec_u, tmp_vec_u, 3);
     vector_copy(ray_ptr->vec_v, tmp_vec_v, 3);
     x = 0;
-    vec_scalar_product(ray_ptr->vec_u, (((double)p_ptr->res_x) / 2.0) * -1.0, 3);
-    vec_scalar_product(ray_ptr->vec_v, (((double)p_ptr->res_y) / 2.0), 3);
     while(x < p_ptr->res_x)
     {
     //    printf("ray_x: |%f|\n", ray_ptr->direction[0]);
@@ -244,7 +242,7 @@ int
 //          printf("ray_y: |%f|\n", ray_ptr->direction[1]);
             vector_addition(ray_ptr->direction, ray_ptr->vec_u, ray_ptr->vec_v, 3);
             vector_addition(ray_ptr->direction, ray_ptr->direction, ray_ptr->vec_w, 3);
-    //        printf("ray_y: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
+            printf("ray_y: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
             if (shoot_ray(p_ptr, ray_ptr) >= 0.0)
                 my_mlx_pixel_put(img_ptr, x, p_ptr->res_y - y, 0x00FF00FF);
             else
