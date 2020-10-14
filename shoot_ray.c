@@ -69,6 +69,59 @@ void
 }
 
 double
+    vector_magnitude(double *vec, int dimension)
+{
+    int     i;
+    double  result;
+
+    i = 0;
+    result = 0;
+    while (i < dimension)
+    {
+        result += pow(vec[i], 2);
+        i++;
+    }
+    return (sqrt(result));
+}
+
+void
+    cross_product(double *dst, double *vec1, double *vec2)
+{
+    dst[0] = (vec1[1] * vec2[2]) - (vec1[2] * vec2[1]);
+    dst[1] = (vec1[2] * vec2[0]) - (vec1[0] * vec2[2]);
+    dst[2] = (vec1[0] * vec2[1]) - (vec1[1] * vec2[0]);
+}
+
+void
+    set_pov_plan(t_object *cam_ptr, t_ray *ray_ptr)
+{
+    int     i;
+    double  magnitude;
+
+    magnitude = vector_magnitude(cam_ptr->coord2, 3);
+    i = 0;
+    while (i < 3)
+    {
+        ray_ptr->vec_w[i] = cam_ptr->coord2[i] / magnitude; /*Copying camera view point in vec w and converting to a unit vector */
+        i++;
+    }
+    ray_ptr->vec_v[0] = 0;
+    ray_ptr->vec_v[1] = -1;
+    ray_ptr->vec_v[2] = 0;
+    if (ray_ptr->vec_w[0] == 0 && ray_ptr->vec_w[1] == -1 && ray_ptr->vec_w[2] == 0)
+    {
+        ray_ptr->vec_v[0] = 0;
+        ray_ptr->vec_v[1] = 0;
+        ray_ptr->vec_v[2] = -1;
+    }
+    cross_product(ray_ptr->vec_u, ray_ptr->vec_w, ray_ptr->vec_v);
+    cross_product(ray_ptr->vec_v, ray_ptr->vec_w, ray_ptr->vec_u);
+    printf("POV plan: u:|%f|%f|%f| v:|%f|%f|%f| w:|%f|%f|%f|\n", ray_ptr->vec_u[0], ray_ptr->vec_u[1], ray_ptr->vec_u[2], \
+    ray_ptr->vec_v[0], ray_ptr->vec_v[1], ray_ptr->vec_v[2], ray_ptr->vec_w[0], ray_ptr->vec_w[1], ray_ptr->vec_w[2]);
+    printf("Dot products: u.v|%f|v.w|%f|u.w|%f|\n", dot_product(ray_ptr->vec_u, ray_ptr->vec_v, 3), dot_product(ray_ptr->vec_v, ray_ptr->vec_w, 3), dot_product(ray_ptr->vec_u, ray_ptr->vec_w, 3));
+}
+
+double
     shoot_ray(t_param *p_ptr, t_ray *ray_ptr)
 {
     double      discrim;
@@ -120,49 +173,30 @@ double
     return (discrim);
 }
 
-double
-    vector_magnitude(double *vec, int dimension)
+void
+    vec_add_scalar(double *vec, double scalar, int dimension)
 {
-    int     i;
-    double  result;
+    int i;
 
     i = 0;
-    result = 0;
     while (i < dimension)
     {
-        result += pow(vec[i], 2);
+        vec[i] += scalar;
         i++;
     }
-    return (sqrt(result));
 }
 
 void
-    cross_product(double *dst, double *vec1, double *vec2)
+    vector_copy(double *src, double *dst, int dimension)
 {
-    dst[0] = (vec1[1] * vec2[2]) - (vec1[2] * vec2[1]);
-    dst[1] = (vec1[2] * vec2[0]) - (vec1[0] * vec2[2]);
-    dst[2] = (vec1[0] * vec2[1]) - (vec1[1] * vec2[0]);
-}
-
-void
-    set_pov_plan(t_object *cam_ptr, t_ray *ray_ptr)
-{
-    int     i;
-    double  magnitude;
+    int i;
 
     i = 0;
-    magnitude = vector_magnitude(cam_ptr->coord2, 3);
-    while (i < 3)
+    while (i < dimension)
     {
-        ray_ptr->vec_w[i] = cam_ptr->coord2[i] / magnitude; /*Copying camera view point in vec w and converting to a unit vector */
+        dst[i] = src[i];
         i++;
     }
-    ray_ptr->vec_v[0] = ray_ptr->vec_w[0];
-    ray_ptr->vec_v[1] = ray_ptr->vec_w[2];
-    ray_ptr->vec_v[2] = ray_ptr->vec_w[1] * -1;
-    cross_product(ray_ptr->vec_u, ray_ptr->vec_v, ray_ptr->vec_w);
-    printf("POV plan: u:|%f|%f|%f| v:|%f|%f|%f| w:|%f|%f|%f|\n", ray_ptr->vec_u[0], ray_ptr->vec_u[1], ray_ptr->vec_u[2], \
-    ray_ptr->vec_v[0], ray_ptr->vec_v[1], ray_ptr->vec_v[2], ray_ptr->vec_w[0], ray_ptr->vec_w[1], ray_ptr->vec_w[2]);
 }
 
 int
@@ -174,6 +208,8 @@ int
     int         i;
     int         x;
     int         y;
+    double      tmp_vec_u[3];
+    double      tmp_vec_v[3];
 
     cam_ptr = get_object(p_ptr->object, camera);
     screen_dist = (((double)p_ptr->res_x) / 2.0) / tan((((double)cam_ptr->fov) / 2.0) * M_PI / 180); /* Converting FOV to gradiants as this is what 'tan()' uses */
@@ -187,25 +223,28 @@ int
     }
     set_pov_plan(cam_ptr, ray_ptr);
     vec_scalar_product(ray_ptr->vec_w, screen_dist, 3); /* Computing direction vector as origin + (distance * direction(unitary)) */
+    vector_copy(ray_ptr->vec_u, tmp_vec_u, 3);
+    vector_copy(ray_ptr->vec_v, tmp_vec_v, 3);
     x = 0;
-//    while(x < p_ptr->res_x)
+    vec_scalar_product(ray_ptr->vec_u, (((double)p_ptr->res_x) / 2.0) * -1.0, 3);
+    vec_scalar_product(ray_ptr->vec_v, (((double)p_ptr->res_y) / 2.0), 3);
+    while(x < p_ptr->res_x)
     {
     //    printf("ray_x: |%f|\n", ray_ptr->direction[0]);
-        vec_scalar_product(ray_ptr->vec_u, (((double)p_ptr->res_x) / 2.0) * -1.0 + (double)x, 3);
-/*        ray_ptr->direction[0] = cam_ptr->coord2[0] * screen_dist \
-        + (((double)p_ptr->res_x) / 2.0) * -1.0 + (double)x;
-        printf("ray_x: |%f|%f|\n", ray_ptr->direction[0], (((double)p_ptr->res_x) / 2.0) * -1.0 + (double)x);
-*/        y = 0;
-//        while (y < p_ptr->res_y)
+//        printf("ray_x: |%f|%f|\n", ray_ptr->direction[0], (((double)p_ptr->res_x) / 2.0) * -1.0 + (double)x);
+        y = 0;
+        ray_ptr->vec_u[0] = tmp_vec_u[0] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
+        ray_ptr->vec_u[1] = tmp_vec_u[1] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
+        ray_ptr->vec_u[2] = tmp_vec_u[2] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
+        while (y < p_ptr->res_y)
         {
-//            printf("ray_y: |%f|\n", ray_ptr->direction[1]);
-            vec_scalar_product(ray_ptr->vec_v, (((double)p_ptr->res_y) / 2.0) * -1.0 + (double)y, 3);
+            ray_ptr->vec_v[0] = tmp_vec_v[0] * ((((double)p_ptr->res_y) / 2.0) - y);
+            ray_ptr->vec_v[1] = tmp_vec_v[1] * ((((double)p_ptr->res_y) / 2.0) - y);
+            ray_ptr->vec_v[2] = tmp_vec_v[2] * ((((double)p_ptr->res_y) / 2.0) - y);
+//          printf("ray_y: |%f|\n", ray_ptr->direction[1]);
             vector_addition(ray_ptr->direction, ray_ptr->vec_u, ray_ptr->vec_v, 3);
             vector_addition(ray_ptr->direction, ray_ptr->direction, ray_ptr->vec_w, 3);
-/*            ray_ptr->direction[1] = cam_ptr->coord2[1] * screen_dist + \
-            ((((double)p_ptr->res_y) / 2.0) * -1 + (double)y);
-            printf("ray_y: |%f|%f|\n", ray_ptr->direction[1], (((double)p_ptr->res_y) / 2.0) * -1.0 + (double)y);
-*/
+    //        printf("ray_y: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
             if (shoot_ray(p_ptr, ray_ptr) >= 0.0)
                 my_mlx_pixel_put(img_ptr, x, p_ptr->res_y - y, 0x00FF00FF);
             else
