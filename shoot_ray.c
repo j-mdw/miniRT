@@ -14,85 +14,6 @@ t_object
 }
 
 void
-    vec_scalar_product(double *vector, double scalar, int dimension)
-{
-    int i;
-
-    i = 0;
-    while (i < dimension)
-    {
-        vector[i] *= scalar;
-        i++;
-    }
-}
-
-double
-    dot_product(double *vec1, double *vec2, int dimension)
-{
-    int     i;
-    double  result;
-
-    i = 0;
-    result = 0.0;
-    while (i < dimension)
-    {
-        result += (vec1[i] * vec2[i]);
-        i++;
-    }
-    return (result);
-}
-
-void
-    vector_addition(double *result, double *vec1, double *vec2, int dimension)
-{
-    int     i;
-
-    i = 0;
-    while (i < dimension)
-    {
-        result[i] = vec1[i] + vec2[i];
-        i++;
-    }
-}
-
-void
-    vector_substraction(double *result, double *vec1, double *vec2, int dimension)
-{
-    int     i;
-
-    i = 0;
-    while (i < dimension)
-    {
-        result[i] = vec1[i] - vec2[i];
-        i++;
-    }
-}
-
-double
-    vector_magnitude(double *vec, int dimension)
-{
-    int     i;
-    double  result;
-
-    i = 0;
-    result = 0;
-    while (i < dimension)
-    {
-        result += pow(vec[i], 2);
-        i++;
-    }
-    return (sqrt(result));
-}
-
-void
-    cross_product(double *dst, double *vec1, double *vec2)
-{
-    dst[0] = (vec1[1] * vec2[2]) - (vec1[2] * vec2[1]);
-    dst[1] = (vec1[2] * vec2[0]) - (vec1[0] * vec2[2]);
-    dst[2] = (vec1[0] * vec2[1]) - (vec1[1] * vec2[0]);
-}
-
-void
     set_pov_plan(t_object *cam_ptr, t_ray *ray_ptr)
 {
     int     i;
@@ -108,7 +29,7 @@ void
     ray_ptr->vec_v[0] = 0;
     ray_ptr->vec_v[1] = -1;
     ray_ptr->vec_v[2] = 0;
-    if (ray_ptr->vec_w[0] == 0 && ray_ptr->vec_w[1] == -1 && ray_ptr->vec_w[2] == 0)
+    if (ray_ptr->vec_w[0] == 0 && (ray_ptr->vec_w[1] == -1 || ray_ptr->vec_w[1] == 1) && ray_ptr->vec_w[2] == 0)
     {
         ray_ptr->vec_v[0] = 0;
         ray_ptr->vec_v[1] = 0;
@@ -152,7 +73,6 @@ double
     b = 2.0 * dot_product(ray_ptr->direction, temp_vec, 3); /* 2d.(e-c) */
     c = dot_product(temp_vec, temp_vec, 3) - pow((sphere1->diameter / 2.0), 2);
     discrim = pow(b, 2) - 4 * a * c;
-//    printf("a: %f, b: %f, c: %f, discrim: %f\n", a, b, c, discrim);
     if (discrim < 0.0)
     {
 //        printf("No HIT\n");
@@ -164,39 +84,14 @@ double
     {
         solut_1 = (-b - sqrt(discrim)) / (2 * a);
         solut_2 = (-b + sqrt(discrim)) / (2 * a);
-  //      printf("solution 1: %f, solution 2: %f\n", solut_1, solut_2);
+//        printf("Direction: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
+//        printf("solution 1: %f, solution 2: %f\n", solut_1, solut_2);
+//        printf("a: %f, b: %f, c: %f, discrim: %f\n", a, b, c, discrim);
         if (pow(solut_1, 2) < pow(solut_2, 2))
             return (solut_1);
         return (solut_2);
     }
-//    printf("a: %f, b: %f, c: %f, discrim: %f\n", a, b, c, discrim);
     return (discrim);
-}
-
-void
-    vec_add_scalar(double *vec, double scalar, int dimension)
-{
-    int i;
-
-    i = 0;
-    while (i < dimension)
-    {
-        vec[i] += scalar;
-        i++;
-    }
-}
-
-void
-    vector_copy(double *src, double *dst, int dimension)
-{
-    int i;
-
-    i = 0;
-    while (i < dimension)
-    {
-        dst[i] = src[i];
-        i++;
-    }
 }
 
 int
@@ -242,11 +137,11 @@ int
 //          printf("ray_y: |%f|\n", ray_ptr->direction[1]);
             vector_addition(ray_ptr->direction, ray_ptr->vec_u, ray_ptr->vec_v, 3);
             vector_addition(ray_ptr->direction, ray_ptr->direction, ray_ptr->vec_w, 3);
-            printf("ray_y: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
+   //         printf("ray_y: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
             if (shoot_ray(p_ptr, ray_ptr) >= 0.0)
-                my_mlx_pixel_put(img_ptr, x, p_ptr->res_y - y, 0x00FF00FF);
+                my_mlx_pixel_put(img_ptr, x, y, 0x00FF00FF);
             else
-                my_mlx_pixel_put(img_ptr, x, p_ptr->res_y - y, p_ptr->light_rgb);
+                my_mlx_pixel_put(img_ptr, x, y, p_ptr->light_rgb);
             y++;
         }
         x++;

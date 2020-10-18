@@ -107,4 +107,13 @@ void			parse_triangle(t_param *p_ptr);
 int				minirt_atoi(char *s, t_param *p_ptr);
 int				ray_trace(t_param *p_ptr, t_pix_data *img_ptr);
 void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
+void			vec_scalar_product(double *vector, double scalar, int dimension);
+double			dot_product(double *vec1, double *vec2, int dimension);
+void			vector_addition(double *result, double *vec1, double *vec2, int dimension);
+void			vector_substraction(double *result, double *vec1, double *vec2, int dimension);
+double			vector_magnitude(double *vec, int dimension);
+void			cross_product(double *dst, double *vec1, double *vec2);
+void			vec_add_scalar(double *vec, double scalar, int dimension);
+void			vector_copy(double *src, double *dst, int dimension);
+
 #endif
