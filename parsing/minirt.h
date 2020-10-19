@@ -27,13 +27,13 @@
 # include <math.h>
 
 typedef enum	e_param_id {
-	camera,
-	light,
 	sphere,
 	plane,
 	square,
 	cylinder,
 	triangle,
+	camera,
+	light,
 }				t_param_id;
 
 typedef struct	s_object {
@@ -49,6 +49,34 @@ typedef struct	s_object {
 	struct s_object	*next_object;
 }				t_object;
 
+typedef	struct	s_ray {
+	double		origin[3];
+	double		direction[3];
+	double		vec_u[3];
+	double		vec_v[3];
+	double		vec_w[3];
+	double		unit_u[3];
+	double		unit_v[3];
+	double		screen_dist;
+}				t_ray;
+
+typedef struct s_pix_data {
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_pix_data;
+
+typedef struct s_quadratic {
+	double      discrim;
+    double      a;
+    double      b;
+    double      c;
+    double      solut_1;
+    double      solut_2;
+} t_quadratic;
+
 typedef	struct	s_param {
 	int			res_found;
 	int			amb_light_found;
@@ -62,23 +90,10 @@ typedef	struct	s_param {
 	char		**extra_split;
 	t_param_id	*elem_id;
 	t_object	*object;
+	t_pix_data	*pix_ptr;
 }				t_param;
 
-typedef	struct	s_ray {
-	double		origin[3];
-	double		direction[3];
-	double		vec_u[3];
-	double		vec_v[3];
-	double		vec_w[3];
-}				t_ray;
-
-typedef struct s_pix_data {
-	void		*img;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-}				t_pix_data;
+typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				check_file_extansion(char *filename, char *file_extansion);
@@ -105,7 +120,7 @@ void			parse_square(t_param *p_ptr);
 void			parse_cylinder(t_param *p_ptr);
 void			parse_triangle(t_param *p_ptr);
 int				minirt_atoi(char *s, t_param *p_ptr);
-int				ray_trace(t_param *p_ptr, t_pix_data *img_ptr);
+int				ray_trace(t_param *p_ptr);
 void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
 void			vec_scalar_product(double *vector, double scalar, int dimension);
 double			dot_product(double *vec1, double *vec2, int dimension);

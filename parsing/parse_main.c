@@ -74,7 +74,7 @@ int	main(int argc, char **argv)
 			return (-1);
 		}
 	}
-/**	params.light_ratio = 1.0;  Useless, just to avoid errors at compile for now 
+/*	params.light_ratio = 1.0;  Useless, just to avoid errors at compile for now 
 	params.light_ratio += 1.0;  Same */
 	if (!check_file_extansion(argv[1], FILE_EXTANSION))
 	{
@@ -93,9 +93,8 @@ int	main(int argc, char **argv)
 	mlx_win = mlx_new_window(mlx, params.res_x, params.res_y, "hello world");
 	img.img = mlx_new_image(mlx, params.res_x, params.res_y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-
-	ray_trace(&params, &img);
-
+	params.pix_ptr = &img;
+	ray_trace(&params);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 	free_all(&params);

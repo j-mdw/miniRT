@@ -43,113 +43,117 @@ void
 }
 
 double
-    shoot_ray(t_param *p_ptr, t_ray *ray_ptr)
+    sphere_intersect(t_ray *ray_ptr, t_object *sphere)
 {
-    double      discrim;
-    double      a;
-    double      b;
-    double      c;
+    t_quadratic quad_params;
     double      temp_vec[3];
-    double      solut_1;
-    double      solut_2;
-    t_object    *sphere1;
 
-/*    
-    At^2 + Bt + C:
-        (d.d)*t^2 + 2d.(e-c)t +(e-c).(e-c) - R^2
-    B^2 - 4AC:
-        B^2: (2d.(e-c))^2
-        4AC: 4 * (d.d) * ((e-c).(e-c) - R^2)
-*/
-    sphere1 = p_ptr->object;
-    while (sphere1->obj_id != sphere)
-    {
-    //    printf("Obj ID: %d\n", sphere1->obj_id);
-        sphere1 = sphere1->next_object;
-    }
-    a = dot_product(ray_ptr->direction, ray_ptr->direction, 3);
-    vector_substraction(temp_vec, ray_ptr->origin, sphere1->coord1, 3); /* (e - c) */
+    quad_params.a = dot_product(ray_ptr->direction, ray_ptr->direction, 3);
+    vector_substraction(temp_vec, ray_ptr->origin, sphere->coord1, 3); /* (e - c) */
 //    printf("(e - c): |%f|%f|%f|\n", temp_vec[0], temp_vec[1], temp_vec[2]);
-    b = 2.0 * dot_product(ray_ptr->direction, temp_vec, 3); /* 2d.(e-c) */
-    c = dot_product(temp_vec, temp_vec, 3) - pow((sphere1->diameter / 2.0), 2);
-    discrim = pow(b, 2) - 4 * a * c;
-    if (discrim < 0.0)
+    quad_params.b = 2.0 * dot_product(ray_ptr->direction, temp_vec, 3); /* 2d.(e-c) */
+    quad_params.c = dot_product(temp_vec, temp_vec, 3) - pow((sphere->diameter / 2.0), 2);
+    quad_params.discrim = pow(quad_params.b, 2) - 4 * quad_params.a * quad_params.c;
+    if (quad_params.discrim < 0.0)
     {
 //        printf("No HIT\n");
         return (-1.0);
     }
-    else if (discrim == 0)
-        return (-b / (2 * a));
+    else if (quad_params.discrim == 0)
+        return (-quad_params.b / (2 * quad_params.a));
     else
     {
-        solut_1 = (-b - sqrt(discrim)) / (2 * a);
-        solut_2 = (-b + sqrt(discrim)) / (2 * a);
+        quad_params.solut_1 = (-quad_params.b - sqrt(quad_params.discrim)) / (2 * quad_params.a);
+        quad_params.solut_2 = (-quad_params.b + sqrt(quad_params.discrim)) / (2 * quad_params.a);
 //        printf("Direction: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
 //        printf("solution 1: %f, solution 2: %f\n", solut_1, solut_2);
 //        printf("a: %f, b: %f, c: %f, discrim: %f\n", a, b, c, discrim);
-        if (pow(solut_1, 2) < pow(solut_2, 2))
-            return (solut_1);
-        return (solut_2);
+        if (pow(quad_params.solut_1, 2) < pow(quad_params.solut_2, 2)) //Not sure this is fine, negative would be behind the camera I think (but then could I get negative values?? considering the vector direction that woud probably not happen?)
+            return (quad_params.solut_1);
+        return (quad_params.solut_2);
     }
-    return (discrim);
+}
+
+void
+    init_func_arr(t_args_func *func_arr)
+{
+    func_arr[sphere] = sphere_intersect;
+}
+
+void
+    shoot_ray(t_param *p_ptr, t_ray *ray_ptr, int x, int y)
+{
+    t_object    *surface;
+    t_object    *closest_surface;
+    t_args_func func_arr[5];
+    double      obj_distance;
+    double      store;
+
+    obj_distance = 0.0;
+    init_func_arr(func_arr);
+    surface = p_ptr->object;
+    while (surface)
+    {
+        if (surface->obj_id <= triangle)
+        {
+            store = func_arr[surface->obj_id](ray_ptr, surface);
+            if (store > 0.0 && (store < obj_distance || obj_distance == 0.0))
+            {
+                obj_distance = store;
+                closest_surface = surface;
+            }
+        }
+        surface = surface->next_object;
+    }
+    if (obj_distance > 0.0)
+        my_mlx_pixel_put(p_ptr->pix_ptr, x, y, closest_surface->rgb);
+    else
+        my_mlx_pixel_put(p_ptr->pix_ptr, x, y, p_ptr->light_rgb);
 }
 
 int
-    ray_trace(t_param *p_ptr, t_pix_data *img_ptr)
+    ray_trace(t_param *p_ptr)
 {
-    double      screen_dist;
     t_object    *cam_ptr;
-    t_ray       *ray_ptr;
+    t_ray       ray;
     int         i;
     int         x;
     int         y;
-    double      tmp_vec_u[3];
-    double      tmp_vec_v[3];
 
     cam_ptr = get_object(p_ptr->object, camera);
-    screen_dist = (((double)p_ptr->res_x) / 2.0) / tan((((double)cam_ptr->fov) / 2.0) * M_PI / 180); /* Converting FOV to gradiants as this is what 'tan()' uses */
-    if (!(ray_ptr = (t_ray *)malloc(sizeof(t_ray))))
-        error_free(p_ptr, "Malloc error in 'shoot-ray'");
+    ray.screen_dist = (((double)p_ptr->res_x) / 2.0) / tan((((double)cam_ptr->fov) / 2.0) * M_PI / 180); /* Converting FOV to gradiants as this is what 'tan()' uses */
     i = 0;
     while (i < 3)
     {
-        ray_ptr->origin[i] = cam_ptr->coord1[i]; /* Copying camera point of view */
+        ray.origin[i] = cam_ptr->coord1[i]; /* Copying camera point of view */
         i++;
     }
-    set_pov_plan(cam_ptr, ray_ptr);
-    vec_scalar_product(ray_ptr->vec_w, screen_dist, 3); /* Computing direction vector as origin + (distance * direction(unitary)) */
-    vector_copy(ray_ptr->vec_u, tmp_vec_u, 3);
-    vector_copy(ray_ptr->vec_v, tmp_vec_v, 3);
+    set_pov_plan(cam_ptr, &ray);
+    vec_scalar_product(ray.vec_w, ray.screen_dist, 3); /* Computing direction vector as origin + (distance * direction(unitary)) */
+    vector_copy(ray.vec_u, ray.unit_u, 3);
+    vector_copy(ray.vec_v, ray.unit_v, 3);
     x = 0;
     while(x < p_ptr->res_x)
     {
-    //    printf("ray_x: |%f|\n", ray_ptr->direction[0]);
-//        printf("ray_x: |%f|%f|\n", ray_ptr->direction[0], (((double)p_ptr->res_x) / 2.0) * -1.0 + (double)x);
         y = 0;
-        ray_ptr->vec_u[0] = tmp_vec_u[0] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
-        ray_ptr->vec_u[1] = tmp_vec_u[1] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
-        ray_ptr->vec_u[2] = tmp_vec_u[2] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
+        ray.vec_u[0] = ray.unit_u[0] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
+        ray.vec_u[1] = ray.unit_u[1] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
+        ray.vec_u[2] = ray.unit_u[2] * ((((double)p_ptr->res_x) / 2.0) * -1.0 + x);
         while (y < p_ptr->res_y)
         {
-            ray_ptr->vec_v[0] = tmp_vec_v[0] * ((((double)p_ptr->res_y) / 2.0) - y);
-            ray_ptr->vec_v[1] = tmp_vec_v[1] * ((((double)p_ptr->res_y) / 2.0) - y);
-            ray_ptr->vec_v[2] = tmp_vec_v[2] * ((((double)p_ptr->res_y) / 2.0) - y);
-//          printf("ray_y: |%f|\n", ray_ptr->direction[1]);
-            vector_addition(ray_ptr->direction, ray_ptr->vec_u, ray_ptr->vec_v, 3);
-            vector_addition(ray_ptr->direction, ray_ptr->direction, ray_ptr->vec_w, 3);
-   //         printf("ray_y: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
-            if (shoot_ray(p_ptr, ray_ptr) >= 0.0)
-                my_mlx_pixel_put(img_ptr, x, y, 0x00FF00FF);
-            else
-                my_mlx_pixel_put(img_ptr, x, y, p_ptr->light_rgb);
+            ray.vec_v[0] = ray.unit_v[0] * ((((double)p_ptr->res_y) / 2.0) - y);
+            ray.vec_v[1] = ray.unit_v[1] * ((((double)p_ptr->res_y) / 2.0) - y);
+            ray.vec_v[2] = ray.unit_v[2] * ((((double)p_ptr->res_y) / 2.0) - y);
+            vector_addition(ray.direction, ray.vec_u, ray.vec_v, 3);
+            vector_addition(ray.direction, ray.direction, ray.vec_w, 3);
+   //         printf("ray_y: |%f|%f|%f|\n", ray.direction[0], ray.direction[1], ray.direction[2]);
+            shoot_ray(p_ptr, &ray, x, y);
             y++;
         }
         x++;
     }
-        printf("Origin: |%f|%f|%f|\n", ray_ptr->origin[0], ray_ptr->origin[1], ray_ptr->origin[2]);
-        printf("Direction: |%f|%f|%f|\n", ray_ptr->direction[0], ray_ptr->direction[1], ray_ptr->direction[2]);
-        printf("Distance: |%f|%f|%f|\n", screen_dist, (double)cam_ptr->fov / 2.0, tan(((double)cam_ptr->fov / 2.0) * M_PI / 180));
-
-    free(ray_ptr);
+        printf("Origin: |%f|%f|%f|\n", ray.origin[0], ray.origin[1], ray.origin[2]);
+        printf("Direction: |%f|%f|%f|\n", ray.direction[0], ray.direction[1], ray.direction[2]);
+        printf("Distance: |%f|%f|%f|\n", ray.screen_dist, (double)cam_ptr->fov / 2.0, tan(((double)cam_ptr->fov / 2.0) * M_PI / 180));
     return (x + y);
 }

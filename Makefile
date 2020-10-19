@@ -2,7 +2,7 @@ TEST_FILES = parsing/parse_main.c parsing/parse_params_1.c parsing/parse_params_
 			parsing/parse_utils_1.c parsing/parse_errors_free.c parsing/gnl/get_next_line.c \
 			parsing/gnl/get_next_line_utils.c parsing/parse_utils_2.c parsing/parse_utils_3.c shoot_ray.c \
 			my_mlx_pixel_put.c vectors_utils_1.c vectors_utils_2.c
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 all: 
 	gcc $(CFLAGS) -I libft/ -I parsing/ -I minilibx-linux/ $(TEST_FILES) libft/libft.a -Lmlx_linux minilibx-linux/libmlx.a -L/usr/lib -lXext -lX11 -lm
@@ -12,3 +12,4 @@ all:
 
 clean:
 	rm minirt_parse
+#-fsanitize=address -g3
