@@ -105,10 +105,12 @@ void
         }
         surface = surface->next_object;
     }
+    vector_addition(ray_ptr->vec_intersect, ray_ptr->origin, ray_ptr->direction, 3);
+    vec_scalar_product(ray_ptr->vec_intersect, obj_distance, 3);
     if (obj_distance > 0.0)
-        my_mlx_pixel_put(p_ptr->pix_ptr, x, y, closest_surface->rgb);
+        my_mlx_pixel_put(p_ptr->pix_ptr, x, y, get_color(p_ptr, ray_ptr, closest_surface));
     else
-        my_mlx_pixel_put(p_ptr->pix_ptr, x, y, p_ptr->light_rgb);
+        my_mlx_pixel_put(p_ptr->pix_ptr, x, y, convert_rgb_format(p_ptr->light_rgb));
 }
 
 int

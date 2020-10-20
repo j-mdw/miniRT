@@ -64,18 +64,16 @@ double
 	return (0.0f);
 }
 
-int
-	get_rgb(t_param *p_ptr, char *s)
+void
+	get_rgb(t_param *p_ptr, char *s, double *arr)
 {
 	int		i;
-	int		store;
-	int		rgb;
+	double	store;
 
 	if (!(p_ptr->extra_split = ft_split(s, ',')))
 		error_free(p_ptr, "Split error in get_rgb function");
 	if (array_size(p_ptr->extra_split) != 3)
 		error_free(p_ptr, "Incorrect number of RGB parameters");
-	rgb = 0;
 	i = 0;
 	while (p_ptr->extra_split[i])
 	{
@@ -83,16 +81,23 @@ int
 			error_free(p_ptr, "Incorrect entries in rgb");
 		else
 		{
-			store = minirt_atoi(p_ptr->extra_split[i], p_ptr);
-			if (store >= 0 && store <= 255 && ++i)
-				rgb = (rgb << 8) + store;
+			store = atoitod(p_ptr, p_ptr->extra_split[i]);
+			if (store >= 0.0 && store <= 255.0)
+				arr[i++] = (store / 255.0);
 			else
 				error_free(p_ptr, "RGB value out of 0-255 range");
 		}
 	}
 	free_2d_array(&p_ptr->extra_split);
-	return (rgb);
 }
+
+/*
+			store = minirt_atoi(p_ptr->extra_split[i], p_ptr);
+			if (store >= 0 && store <= 255 && ++i)
+				rgb = (rgb << 8) + store;
+			else
+				error_free(p_ptr, "RGB value out of 0-255 range");
+*/
 
 void
 	get_coord(char *s, double arr[], t_param *p_ptr, int size)

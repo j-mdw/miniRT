@@ -33,24 +33,24 @@ void
 
 	printf("Resoultion parameters: |x: %d|y: %d|\n", param_ptr->res_x, param_ptr->res_y);
 	printf("Light ratio: %f\n", param_ptr->light_ratio);
-	printf("Light RGB is: %#x\n", param_ptr->light_rgb);
+	printf("Light RGB is: %.4f|%.4f|%.4f|\n", param_ptr->light_rgb[0], param_ptr->light_rgb[1], param_ptr->light_rgb[2]);
 	object_ptr = param_ptr->object;
 	while (object_ptr)
 	{
 		if (object_ptr->obj_id == camera)
 			printf("Camera inputs:\ncoordinates |%f|%f|%f|\norient_vector |%f|%f|%f|\nFOV: %d\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->fov);
 		else if (object_ptr->obj_id == light)
-			printf("Light inputs:\ncoordinates |%f|%f|%f|\nRatio |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->brightness, object_ptr->rgb);
+			printf("Light inputs:\ncoordinates |%f|%f|%f|\nRatio |%f|\nRgb |%.4f|%.4f|%.4f||\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->brightness, object_ptr->rgb[0], object_ptr->rgb[1],object_ptr->rgb[2]);
 		else if (object_ptr->obj_id == sphere)
-			printf("Sphere inputs:\ncoordinates |%f|%f|%f|\nDiameter |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->diameter, object_ptr->rgb);
+			printf("Sphere inputs:\ncoordinates |%f|%f|%f|\nDiameter |%f|\nRgb |%.4f|%.4f|%.4f||\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->diameter, object_ptr->rgb[0], object_ptr->rgb[1],object_ptr->rgb[2]);
 		else if (object_ptr->obj_id == plane)
-			printf("Plane inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->rgb);
+			printf("Plane inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nRgb |%.4f|%.4f|%.4f||\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->rgb[0], object_ptr->rgb[1],object_ptr->rgb[2]);
 		else if (object_ptr->obj_id == square)
-			printf("Square inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nHeight |%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->height, object_ptr->rgb);
+			printf("Square inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nHeight |%f|\nRgb |%.4f|%.4f|%.4f||\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->height, object_ptr->rgb[0], object_ptr->rgb[1],object_ptr->rgb[2]);
 		else if (object_ptr->obj_id == cylinder)
-			printf("Cylinder inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nRgb |%#x|\nDiameter |%f|\nHeight |%f|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->rgb, object_ptr->diameter, object_ptr->height);
+			printf("Cylinder inputs:\ncoordinates |%f|%f|%f|\nOrientation vector |%f|%f|%f|\nRgb |%.4f|%.4f|%.4f||\nDiameter |%f|\nHeight |%f|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->rgb[0], object_ptr->rgb[1],object_ptr->rgb[2], object_ptr->diameter, object_ptr->height);
 		else if (object_ptr->obj_id == triangle)
-			printf("Triangle inputs:\ncoordinates1 |%f|%f|%f|\nCoordinates2 |%f|%f|%f|\nCoordinates3 |%f|%f|%f|\nRgb |%#x|\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->coord3[0], object_ptr->coord3[1], object_ptr->coord3[2], object_ptr->rgb);
+			printf("Triangle inputs:\ncoordinates1 |%f|%f|%f|\nCoordinates2 |%f|%f|%f|\nCoordinates3 |%f|%f|%f|\nRgb |%.4f|%.4f|%.4f||\n", object_ptr->coord1[0], object_ptr->coord1[1], object_ptr->coord1[2], object_ptr->coord2[0], object_ptr->coord2[1], object_ptr->coord2[2], object_ptr->coord3[0], object_ptr->coord3[1], object_ptr->coord3[2], object_ptr->rgb[0], object_ptr->rgb[1],object_ptr->rgb[2]);
 		object_ptr = object_ptr->next_object;
 	}
 }

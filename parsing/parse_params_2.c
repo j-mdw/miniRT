@@ -48,7 +48,7 @@ void
 		p_ptr->light_ratio = atoitod(p_ptr, p_ptr->line_split[1]);
 		if (p_ptr->light_ratio > 1.0 || p_ptr->light_ratio < 0.0)
 			error_free(p_ptr, "Light ratio not in  [0.0,1.0]");
-		p_ptr->light_rgb = get_rgb(p_ptr, p_ptr->line_split[2]);
+		get_rgb(p_ptr, p_ptr->line_split[2], p_ptr->light_rgb);
 	}
 }
 
@@ -94,7 +94,7 @@ void
 	p_ptr->object->brightness = atoitod(p_ptr, p_ptr->line_split[2]);
 	if (p_ptr->object->brightness < 0.0 || p_ptr->object->brightness > 1.0)
 		error_free(p_ptr, "Light brightness not in [0.0,1.0]");
-	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[3]);
+	get_rgb(p_ptr, p_ptr->line_split[3], p_ptr->object->rgb);
 }
 
 void
@@ -108,5 +108,5 @@ void
 	p_ptr->object->diameter = atoitod(p_ptr, p_ptr->line_split[2]);
 	if (p_ptr->object->diameter <= 0)
 		error_free(p_ptr, "Diameter must be greater than 0");
-	p_ptr->object->rgb = get_rgb(p_ptr, p_ptr->line_split[3]);
+	get_rgb(p_ptr, p_ptr->line_split[3], p_ptr->object->rgb);
 }
