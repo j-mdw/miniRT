@@ -1,7 +1,4 @@
 #include "parsing/minirt.h"
-#ifndef M_PI
-# define M_PI acos(-1.0)
-#endif
 
 t_object
     *get_object(t_object *obj_ptr, int obj_id)

@@ -13,6 +13,12 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+#ifndef M_PI
+# define M_PI acos(-1.0)
+#endif
+
+#define PHONG_EXPONENT 100.0
+
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
 # include "../minilibx-linux/mlx.h"
@@ -59,6 +65,10 @@ typedef	struct	s_ray {
 	double		unit_v[3];
 	double		screen_dist;
 	double		vec_intersect[3];
+	double		v_cam_eye[3];
+	double		n_normal[3];
+	double		l_light_src[3];
+	double		tmp_vec[3];
 }				t_ray;
 
 typedef struct s_pix_data {
