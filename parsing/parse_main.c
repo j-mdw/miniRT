@@ -94,6 +94,8 @@ int	main(int argc, char **argv)
 	img.img = mlx_new_image(mlx, params.res_x, params.res_y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	params.pix_ptr = &img;
+	init_func_arr(params.func_arr);
+	printf("KSGSDF\n");
 	ray_trace(&params);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);

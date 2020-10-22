@@ -18,6 +18,7 @@
 #endif
 
 #define PHONG_EXPONENT 100.0
+#define	DIFF_SURFACE 5
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
@@ -88,6 +89,8 @@ typedef struct s_quadratic {
     double      solut_2;
 } t_quadratic;
 
+typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
+
 typedef	struct	s_param {
 	int			res_found;
 	int			amb_light_found;
@@ -102,9 +105,8 @@ typedef	struct	s_param {
 	t_param_id	*elem_id;
 	t_object	*object;
 	t_pix_data	*pix_ptr;
+	t_args_func	func_arr[DIFF_SURFACE];
 }				t_param;
-
-typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				check_file_extansion(char *filename, char *file_extansion);
@@ -133,6 +135,7 @@ void			parse_triangle(t_param *p_ptr);
 int				minirt_atoi(char *s, t_param *p_ptr);
 int				ray_trace(t_param *p_ptr);
 void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
+void			init_func_arr(t_args_func *func_arr);
 
 //VECTORS
 

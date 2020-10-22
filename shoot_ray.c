@@ -82,18 +82,16 @@ void
 {
     t_object    *surface;
     t_object    *closest_surface;
-    t_args_func func_arr[5];
     double      obj_distance;
     double      store;
 
     obj_distance = 0.0;
-    init_func_arr(func_arr);
     surface = p_ptr->object;
     while (surface)
     {
-        if (surface->obj_id <= triangle)
+        if (surface->obj_id <= DIFF_SURFACE)
         {
-            store = func_arr[surface->obj_id](ray_ptr, surface);
+            store = p_ptr->func_arr[surface->obj_id](ray_ptr, surface);
             if (store > 0.0 && (store < obj_distance || obj_distance == 0.0))
             {
                 obj_distance = store;

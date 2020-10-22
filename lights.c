@@ -52,7 +52,7 @@ double
     vec_scalar_product(vec_h, (1 / vector_magnitude(vec_h, 3)), 3);
     return (spec_coeff * light_ptr->brightness * pow(max_d(0.0, dot_product(ray_ptr->n_normal, vec_h, 3)), PHONG_EXPONENT));
 }
-
+/*
 int
     get_color(t_param *p_ptr, t_ray *ray_ptr, t_object *obj_ptr)
 {
@@ -83,8 +83,8 @@ int
             // printf("ray_ptr->l_light_src: %f|%f|%f|%f\n", ray_ptr->l_light_src[0], ray_ptr->l_light_src[1], ray_ptr->l_light_src[2], vector_magnitude(ray_ptr->l_light_src, 3));
             dot_l_n = max_d(0.0, dot_product(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
             // printf("dot n.l: %f\n", dot_l_n);
-            /*if (dot_l_n == 0.0)
-                return (convert_rgb_format(p_ptr->light_rgb));  UNCOMMENT THIS ONCE FULLY FUNCTIONAL - USEFUL FOR DEBUGGING */  
+            // if (dot_l_n == 0.0)
+                // return (convert_rgb_format(p_ptr->light_rgb));  UNCOMMENT THIS ONCE FULLY FUNCTIONAL - USEFUL FOR DEBUGGING 
             i = 0;
             while (i < 3)
             {
@@ -101,4 +101,82 @@ int
         // light_ptr = light_ptr->next_object;
     // }
     return (convert_rgb_format(p_ptr->light_rgb));     
+}
+*/
+int
+    is_in_shadow(t_param *p_ptr, t_ray *ray_ptr)
+{
+    t_object    *surface;
+    double      max_dist;
+    double      store;
+    t_ray       shadow_ray;
+
+    max_dist = vector_magnitude(ray_ptr->l_light_src, 3);
+    surface = p_ptr->object;
+    vector_copy(ray_ptr->vec_intersect, shadow_ray.origin, 3);
+    vector_copy(ray_ptr->l_light_src, shadow_ray.direction, 3);
+    while (surface)
+    {
+        if (surface->obj_id <= DIFF_SURFACE)
+        {
+            store = p_ptr->func_arr[surface->obj_id](&shadow_ray, surface);
+            if (store > 0.0 && store < max_dist)
+                return (1);
+        }
+        surface = surface->next_object;
+    }
+    return (0);
+}
+
+int
+    get_color(t_param *p_ptr, t_ray *ray_ptr, t_object *obj_ptr)
+{
+    double      rgb[3];
+    t_object    *light_ptr;
+    double      dot_l_n;
+    int         i;
+
+    light_ptr = p_ptr->object;
+    vector_copy(ray_ptr->vec_intersect, ray_ptr->tmp_vec, 3);
+    vec_scalar_product(ray_ptr->tmp_vec, -1.0, 3);
+    i = 0;
+    rgb[0] = rgb[1] = rgb[2] = 0;
+    while (i < 3)
+    {
+        ray_ptr->n_normal[i] = (ray_ptr->vec_intersect[i] - obj_ptr->coord1[i]) / (obj_ptr->diameter / 2);
+        i++;
+    }
+    while (light_ptr)
+    {
+        if (light_ptr->obj_id == light)
+        {
+            i = 0;
+            while (i < 3)
+            {
+                ray_ptr->l_light_src[i] = (light_ptr->coord1[i] - ray_ptr->vec_intersect[i]); /// dot_product(light_ptr->coord1, ray_ptr->tmp_vec, 3);
+                i++;
+            }
+            if (!is_in_shadow(p_ptr, ray_ptr)) //important that l_light_src be not normalized before sent to is_in_shadow
+            { 
+                vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3); // Normalizing v_l
+                dot_l_n = max_d(0.0, dot_product(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
+                i = 0;
+                while (i < 3)
+                {
+                    rgb[i] += obj_ptr->rgb[i] * light_ptr->brightness * light_ptr->rgb[i] * dot_l_n + specular_reflexion(ray_ptr, light_ptr);
+                    i++;
+                }
+            }
+        }
+        light_ptr = light_ptr->next_object;
+    }
+    i = 0;
+    while (i < 3)
+    {
+        rgb[i] += p_ptr->light_ratio * p_ptr->light_rgb[i];
+        if (rgb[i] > 1.0)
+            rgb[i] = 1.0;
+        i++;
+    }
+    return (convert_rgb_format(rgb)); 
 }
