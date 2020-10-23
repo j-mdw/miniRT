@@ -91,7 +91,9 @@ void
     {
         if (surface->obj_id <= DIFF_SURFACE)
         {
-            store = p_ptr->func_arr[surface->obj_id](ray_ptr, surface);
+            // printf("Before bug? Surface ID: %d\n", surface->obj_id);
+            store = p_ptr->func_arr_ptr[surface->obj_id](ray_ptr, surface);
+            // printf("Bug not in array call? Store: %f\n", store);
             if (store > 0.0 && (store < obj_distance || obj_distance == 0.0))
             {
                 obj_distance = store;

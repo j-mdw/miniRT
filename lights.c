@@ -119,8 +119,8 @@ int
     {
         if (surface->obj_id <= DIFF_SURFACE)
         {
-            store = p_ptr->func_arr[surface->obj_id](&shadow_ray, surface);
-            if (store > 0.0 && store < max_dist)
+            store = p_ptr->func_arr_ptr[surface->obj_id](&shadow_ray, surface);
+            if (store > 0.1 && store < max_dist)
                 return (1);
         }
         surface = surface->next_object;

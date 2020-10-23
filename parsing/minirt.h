@@ -18,7 +18,7 @@
 #endif
 
 #define PHONG_EXPONENT 100.0
-#define	DIFF_SURFACE 5
+#define	DIFF_SURFACE 4
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
@@ -105,7 +105,7 @@ typedef	struct	s_param {
 	t_param_id	*elem_id;
 	t_object	*object;
 	t_pix_data	*pix_ptr;
-	t_args_func	func_arr[DIFF_SURFACE];
+	t_args_func	*func_arr_ptr;
 }				t_param;
 
 int				ft_strcmp(const char *s1, const char *s2);
