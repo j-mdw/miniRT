@@ -18,7 +18,7 @@
 #endif
 
 #define PHONG_EXPONENT 100.0
-#define	DIFF_SURFACE 4
+#define	DIFF_SURFACE 5
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"

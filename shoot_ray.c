@@ -89,7 +89,7 @@ void
     surface = p_ptr->object;
     while (surface)
     {
-        if (surface->obj_id <= DIFF_SURFACE)
+        if (surface->obj_id < DIFF_SURFACE)
         {
             // printf("Before bug? Surface ID: %d\n", surface->obj_id);
             store = p_ptr->func_arr_ptr[surface->obj_id](ray_ptr, surface);

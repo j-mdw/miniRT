@@ -115,12 +115,13 @@ int
     surface = p_ptr->object;
     vector_copy(ray_ptr->vec_intersect, shadow_ray.origin, 3);
     vector_copy(ray_ptr->l_light_src, shadow_ray.direction, 3);
+    vec_scalar_product(shadow_ray.direction, (1 / max_dist), 3);
     while (surface)
     {
-        if (surface->obj_id <= DIFF_SURFACE)
+        if (surface->obj_id < DIFF_SURFACE)
         {
             store = p_ptr->func_arr_ptr[surface->obj_id](&shadow_ray, surface);
-            if (store > 0.1 && store < max_dist)
+            if (store > 0.1 && pow(store, 2) < pow(max_dist, 2))
                 return (1);
         }
         surface = surface->next_object;
@@ -163,7 +164,7 @@ int
                 i = 0;
                 while (i < 3)
                 {
-                    rgb[i] += obj_ptr->rgb[i] * light_ptr->brightness * light_ptr->rgb[i] * dot_l_n + specular_reflexion(ray_ptr, light_ptr);
+                    rgb[i] += obj_ptr->rgb[i] * light_ptr->brightness * light_ptr->rgb[i] * dot_l_n + specular_reflexion(ray_ptr, light_ptr); //TBU: bcs specular reflexion is added, if light color is black, there is still reflexion
                     i++;
                 }
             }
