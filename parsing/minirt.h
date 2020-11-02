@@ -92,6 +92,7 @@ typedef struct s_quadratic {
 typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
 
 typedef	struct	s_param {
+	int			fd;
 	int			res_found;
 	int			amb_light_found;
 	int			res_x;
@@ -104,15 +105,18 @@ typedef	struct	s_param {
 	char		**extra_split;
 	t_param_id	*elem_id;
 	t_object	*object;
+	t_object	*current_camera;
 	t_pix_data	*pix_ptr;
 	t_args_func	*func_arr_ptr;
+	void		*mlx_ptr;
+	void		*mlx_win_ptr;
 }				t_param;
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				check_file_extansion(char *filename, char *file_extansion);
 int				ft_isblank(int c);
 void			replace_char(char *text, char find, char replace);
-int				parse_params(t_param *p_ptr, int fd);
+int				parse_params(t_param *p_ptr);
 void			error_free(t_param *param, char *error_message);
 void			error_free(t_param *param, char *error_message);
 void			free_all(t_param *param);
@@ -136,6 +140,7 @@ int				minirt_atoi(char *s, t_param *p_ptr);
 int				ray_trace(t_param *p_ptr);
 void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
 void			init_func_arr(t_args_func *func_arr);
+t_object		*get_object(t_object *obj_ptr, int obj_id);
 
 //VECTORS
 

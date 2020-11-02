@@ -11,16 +11,16 @@ t_object
 }
 
 void
-    set_pov_plan(t_object *cam_ptr, t_ray *ray_ptr)
+    set_pov_plan(t_object *current_camera, t_ray *ray_ptr)
 {
     int     i;
     double  magnitude;
 
-    magnitude = vector_magnitude(cam_ptr->coord2, 3);
+    magnitude = vector_magnitude(current_camera->coord2, 3);
     i = 0;
     while (i < 3)
     {
-        ray_ptr->vec_w[i] = cam_ptr->coord2[i] / magnitude; /*Copying camera view point in vec w and converting to a unit vector */
+        ray_ptr->vec_w[i] = current_camera->coord2[i] / magnitude; /*Copying camera view point in vec w and converting to a unit vector */
         i++;
     }
     ray_ptr->vec_v[0] = 0;
@@ -113,21 +113,19 @@ void
 int
     ray_trace(t_param *p_ptr)
 {
-    t_object    *cam_ptr;
     t_ray       ray;
     int         i;
     int         x;
     int         y;
 
-    cam_ptr = get_object(p_ptr->object, camera);
-    ray.screen_dist = (((double)p_ptr->res_x) / 2.0) / tan((((double)cam_ptr->fov) / 2.0) * M_PI / 180); /* Converting FOV to gradiants as this is what 'tan()' uses */
+    ray.screen_dist = (((double)p_ptr->res_x) / 2.0) / tan((((double)p_ptr->current_camera->fov) / 2.0) * M_PI / 180); /* Converting FOV to gradiants as this is what 'tan()' uses */
     i = 0;
     while (i < 3)
     {
-        ray.origin[i] = cam_ptr->coord1[i]; /* Copying camera point of view */
+        ray.origin[i] = p_ptr->current_camera->coord1[i]; /* Copying camera point of view */
         i++;
     }
-    set_pov_plan(cam_ptr, &ray);
+    set_pov_plan(p_ptr->current_camera, &ray);
     vec_scalar_product(ray.vec_w, ray.screen_dist, 3); /* Computing direction vector as origin + (distance * direction(unitary)) */
     vector_copy(ray.vec_u, ray.unit_u, 3);
     vector_copy(ray.vec_v, ray.unit_v, 3);
@@ -153,6 +151,6 @@ int
     }
         printf("Origin: |%f|%f|%f|\n", ray.origin[0], ray.origin[1], ray.origin[2]);
         printf("Direction: |%f|%f|%f|\n", ray.direction[0], ray.direction[1], ray.direction[2]);
-        printf("Distance: |%f|%f|%f|\n", ray.screen_dist, (double)cam_ptr->fov / 2.0, tan(((double)cam_ptr->fov / 2.0) * M_PI / 180));
+        printf("Distance: |%f|%f|%f|\n", ray.screen_dist, (double)p_ptr->current_camera->fov / 2.0, tan(((double)p_ptr->current_camera->fov / 2.0) * M_PI / 180));
     return (x + y);
 }

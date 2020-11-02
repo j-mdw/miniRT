@@ -65,11 +65,12 @@ void
 }
 
 void
-	error_free(t_param *param, char *error_message)
+	error_free(t_param *p_ptr, char *error_message)
 {
 	printf("%s\n", error_message);
-	if (param->line)
-		printf("ERROR, line: %s\n", param->line);
-	free_all(param);
+	if (p_ptr->line)
+		printf("ERROR, line: %s\n", p_ptr->line);
+	free_all(p_ptr);
+	close(p_ptr->fd);
 	exit(1);
 }

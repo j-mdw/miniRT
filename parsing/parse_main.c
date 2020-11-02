@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 #define	FILE_EXTANSION ".rt"
-#define	FLAG "--save"
+#define	SAVE_FLAG "--save"
 
 void
 	param_struct_init(t_param *param_ptr)
@@ -27,7 +27,7 @@ void
 }
 
 void
-	display_parameters(t_param *param_ptr)
+	print_parameters(t_param *param_ptr)
 {
 	t_object	*object_ptr;
 
@@ -55,52 +55,105 @@ void
 	}
 }
 
-int	main(int argc, char **argv)
+int
+	deal_key(int key, void *param)
 {
-	int			fd;
-	t_param		params;
-	void		*mlx;
-	void		*mlx_win;
-	t_pix_data	img;
-	t_args_func func_arr[DIFF_SURFACE];
+	t_object	*tmp_cam;
 
-	param_struct_init(&params);
+	if (key == 65307)
+	{
+		printf("Mais oui!");
+		mlx_destroy_window(((t_param *)param)->mlx_ptr, ((t_param *)param)->mlx_win_ptr);
+		free_all(param);
+		exit(0);
+	}
+	if (key == 'n')
+	{
+		tmp_cam = ((t_param *)param)->current_camera->next_object;
+		while (tmp_cam && tmp_cam->obj_id != camera)
+		{
+			if (!tmp_cam->next_object)
+				tmp_cam = ((t_param *)param)->object;
+			else
+				tmp_cam = tmp_cam->next_object;			
+		}
+		((t_param *)param)->current_camera = tmp_cam;
+		ray_trace(((t_param *)param));
+	}
+	if (key == 48)
+		printf("saperlipopettes!\n");
+	param++;
+	printf("Bob %d\n", key);
+	return (0);
+}
+
+int
+	deal_mouse(int button, int x, int y, void *param)
+{
+	printf("Button: %d, x: %d, y: %d, BS: %d\n", button, x, y, ((t_param *)param)->res_x);
+	return (0);
+}
+
+int
+	deal_hook(void *params)
+{
+	(void)params;
+	exit(0);
+	return (0);
+}
+
+int
+	check_open_file(int argc, char **argv, t_param *p_ptr)
+{
+	param_struct_init(p_ptr);
 	if (argc != 2)
 	{
-		if (argc == 3 && !(ft_strcmp(argv[2], FLAG)))
-			params.save = 1;
+		if (argc == 3 && !(ft_strcmp(argv[2], SAVE_FLAG)))
+			p_ptr->save = 1;
 		else
 		{
-			ft_putstr_fd("Incorrect number of arguments", 1);
-			return (-1);
+			ft_putstr_fd("Incorrect number of arguments or wrong flag", 1);
+			return (0);
 		}
 	}
-/*	params.light_ratio = 1.0;  Useless, just to avoid errors at compile for now 
-	params.light_ratio += 1.0;  Same */
 	if (!check_file_extansion(argv[1], FILE_EXTANSION))
 	{
 		ft_putstr_fd("Incorrect file extansion", 1);
-		return (-1);
+		return (0);
 	}
-	if (!(fd = open(argv[1], O_RDONLY)))
+	if (!(p_ptr->fd = open(argv[1], O_RDONLY)))
 	{
 		ft_putstr_fd("Failed opening the file, please make sure the file exists\n", 1);
-		return (-1);
+		return (0);
 	}
-	parse_params(&params, fd);
-	display_parameters(&params);
-	if(!(mlx = mlx_init()))
+	parse_params(p_ptr);
+	print_parameters(p_ptr);
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	t_param		params;
+	t_pix_data	img;
+	t_args_func func_arr[DIFF_SURFACE];
+
+	if (!(check_open_file(argc, argv, &params)))
+		error_free(&params, "");
+	if(!(params.mlx_ptr = mlx_init()))
 		error_free(&params, "mlx_init failed");
-	mlx_win = mlx_new_window(mlx, params.res_x, params.res_y, "hello world");
-	img.img = mlx_new_image(mlx, params.res_x, params.res_y);
+	params.mlx_win_ptr = mlx_new_window(params.mlx_ptr, params.res_x, params.res_y, "hello world");
+	img.img = mlx_new_image(params.mlx_ptr, params.res_x, params.res_y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	params.pix_ptr = &img;
-	printf("KSGSDF\n");
 	init_func_arr(func_arr);
 	params.func_arr_ptr = func_arr;
+	params.current_camera = get_object(params.object, camera);
 	ray_trace(&params);
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	mlx_loop(mlx);
+	mlx_put_image_to_window(params.mlx_ptr, params.mlx_win_ptr, img.img, 0, 0);
+	mlx_hook(params.mlx_win_ptr, 17, (1L << 17), deal_hook, &params);
+	mlx_key_hook(params.mlx_win_ptr, deal_key, &params);
+	mlx_mouse_hook(params.mlx_win_ptr, deal_mouse, &params);
+	mlx_loop(params.mlx_ptr);
 	free_all(&params);
 	return (0);
 }

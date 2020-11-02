@@ -38,11 +38,11 @@ static void
 }
 
 int
-	parse_params(t_param *p_ptr, int fd)
+	parse_params(t_param *p_ptr)
 {
 	int gnl;
 
-	while ((gnl = get_next_line(fd, &p_ptr->line)) > 0)
+	while ((gnl = get_next_line(p_ptr->fd, &p_ptr->line)) > 0)
 	{
 		printf("Line: %s\n", p_ptr->line);
 		replace_char(p_ptr->line, '\t', ' ');
