@@ -30,6 +30,8 @@ void
 	if (i != 3)
 		error_free(p_ptr, "Orientation vector inputs not in range [-1,1]");
 	get_rgb(p_ptr, p_ptr->line_split[3], p_ptr->object->rgb);
+	i = vector_magnitude(p_ptr->object->coord2, 3);
+	vec_scalar_product(p_ptr->object->coord2, 1 / i, 3);
 }
 
 void

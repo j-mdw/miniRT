@@ -71,10 +71,27 @@ double
     }
 }
 
+// (p0 - l0) . n / l . n
+
+double
+    plane_intersect(t_ray *ray_ptr, t_object *plane_ptr)
+{
+    double  intersect;
+    double  tmp_val;
+    double  tmp_vec[3];
+
+    if ((tmp_val = dot_product(ray_ptr->direction, plane_ptr->coord2, 3)) == 0.0)
+        return(0.0);
+    vector_substraction(tmp_vec, plane_ptr->coord1, ray_ptr->origin, 3);
+    intersect = dot_product(tmp_vec, plane_ptr->coord2, 3) / tmp_val;
+    return (intersect);
+}
+
 void
     init_func_arr(t_args_func *func_arr)
 {
     func_arr[sphere] = sphere_intersect;
+    func_arr[plane] = plane_intersect;
 }
 
 void
@@ -91,7 +108,6 @@ void
     {
         if (surface->obj_id < DIFF_SURFACE)
         {
-            // printf("Before bug? Surface ID: %d\n", surface->obj_id);
             store = p_ptr->func_arr_ptr[surface->obj_id](ray_ptr, surface);
             // printf("Bug not in array call? Store: %f\n", store);
             if (store > 0.0 && (store < obj_distance || obj_distance == 0.0))
@@ -143,7 +159,7 @@ int
             ray.vec_v[2] = ray.unit_v[2] * ((((double)p_ptr->res_y) / 2.0) - y);
             vector_addition(ray.direction, ray.vec_u, ray.vec_v, 3);
             vector_addition(ray.direction, ray.direction, ray.vec_w, 3);
-   //         printf("ray_y: |%f|%f|%f|\n", ray.direction[0], ray.direction[1], ray.direction[2]);
+            // printf("ray_y: |%f|%f|%f|\n", ray.direction[0], ray.direction[1], ray.direction[2]);
             shoot_ray(p_ptr, &ray, x, y);
             y++;
         }

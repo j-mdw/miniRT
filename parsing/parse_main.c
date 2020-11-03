@@ -69,8 +69,11 @@ int
 	}
 	if (key == 'n')
 	{
-		tmp_cam = ((t_param *)param)->current_camera->next_object;
-		while (tmp_cam && tmp_cam->obj_id != camera)
+		if (((t_param *)param)->current_camera->next_object)
+			tmp_cam = ((t_param *)param)->current_camera->next_object;
+		else
+			tmp_cam =  ((t_param *)param)->object;
+		while (tmp_cam->obj_id != camera)
 		{
 			if (!tmp_cam->next_object)
 				tmp_cam = ((t_param *)param)->object;
@@ -79,6 +82,7 @@ int
 		}
 		((t_param *)param)->current_camera = tmp_cam;
 		ray_trace(((t_param *)param));
+		mlx_put_image_to_window(((t_param *)param)->mlx_ptr, ((t_param *)param)->mlx_win_ptr, ((t_param *)param)->pix_ptr->img, 0, 0);
 	}
 	if (key == 48)
 		printf("saperlipopettes!\n");
