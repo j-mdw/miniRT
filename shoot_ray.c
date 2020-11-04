@@ -124,6 +124,17 @@ void
         my_mlx_pixel_put(p_ptr->pix_ptr, x, y, get_color(p_ptr, ray_ptr, closest_surface));
     else
         my_mlx_pixel_put(p_ptr->pix_ptr, x, y, convert_rgb_format(p_ptr->light_rgb));
+    if (closest_surface->obj_id == sphere)
+    {
+        vector_substraction(ray_ptr->n_normal, ray_ptr->vec_intersect, closest_surface->coord1, 3);
+        vec_scalar_product(ray_ptr->n_normal, 2 / closest_surface->diameter, 3);
+    }
+    if (closest_surface->obj_id == plane)
+    {
+        vector_copy(closest_surface->coord2, ray_ptr->n_normal, 3);
+        if (dot_product(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
+            vec_scalar_product(ray_ptr->n_normal, -1.0, 3);
+    }
 }
 
 int

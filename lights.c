@@ -137,26 +137,16 @@ int
     double      dot_l_n;
     int         i;
 
-    light_ptr = p_ptr->object;
-    vector_copy(ray_ptr->vec_intersect, ray_ptr->tmp_vec, 3);
-    vec_scalar_product(ray_ptr->tmp_vec, -1.0, 3);
     i = 0;
     rgb[0] = rgb[1] = rgb[2] = 0;
-    while (i < 3)
-    {
-        ray_ptr->n_normal[i] = (ray_ptr->vec_intersect[i] - obj_ptr->coord1[i]) / (obj_ptr->diameter / 2);
-        i++;
-    }
+    light_ptr = p_ptr->object;
+    // vector_substraction(ray_ptr->n_normal, ray_ptr->vec_intersect, obj_ptr->coord1, 3);
+    // vec_scalar_product(ray_ptr->n_normal, 2 / obj_ptr->diameter, 3);
     while (light_ptr)
     {
         if (light_ptr->obj_id == light)
         {
-            i = 0;
-            while (i < 3)
-            {
-                ray_ptr->l_light_src[i] = (light_ptr->coord1[i] - ray_ptr->vec_intersect[i]); /// dot_product(light_ptr->coord1, ray_ptr->tmp_vec, 3);
-                i++;
-            }
+            vector_substraction(ray_ptr->l_light_src, light_ptr->coord1, ray_ptr->vec_intersect, 3);
             if (!is_in_shadow(p_ptr, ray_ptr)) //important that l_light_src be not normalized before sent to is_in_shadow
             { 
                 vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3); // Normalizing v_l
@@ -164,7 +154,7 @@ int
                 i = 0;
                 while (i < 3)
                 {
-                    rgb[i] += obj_ptr->rgb[i] * light_ptr->brightness * light_ptr->rgb[i] * dot_l_n + specular_reflexion(ray_ptr, light_ptr); //TBU: bcs specular reflexion is added, if light color is black, there is still reflexion
+                    rgb[i] += obj_ptr->rgb[i] * light_ptr->brightness * light_ptr->rgb[i] * dot_l_n;// + specular_reflexion(ray_ptr, light_ptr); //TBU: bcs specular reflexion is added, if light color is black, there is still reflexion
                     i++;
                 }
             }
