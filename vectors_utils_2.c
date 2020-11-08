@@ -33,3 +33,12 @@ void
         i++;
     }
 }
+
+void
+    vec_normalize(double *vec, int dimension)
+{
+    double  magnitude;
+
+    magnitude = vector_magnitude(vec, dimension);
+    vec_scalar_product(vec, 1 / magnitude, dimension);
+}

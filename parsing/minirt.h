@@ -141,6 +141,7 @@ int				ray_trace(t_param *p_ptr);
 void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
 void			init_func_arr(t_args_func *func_arr);
 t_object		*get_object(t_object *obj_ptr, int obj_id);
+void			set_pov_plan(double *orient_vec, t_ray *ray_ptr);
 
 //VECTORS
 
@@ -152,6 +153,7 @@ double			vector_magnitude(double *vec, int dimension);
 void			cross_product(double *dst, double *vec1, double *vec2);
 void			vec_add_scalar(double *vec, double scalar, int dimension);
 void			vector_copy(double *src, double *dst, int dimension);
+void			vec_normalize(double *vec, int dimension);
 
 //SHADING
 

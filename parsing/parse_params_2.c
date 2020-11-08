@@ -74,6 +74,7 @@ void
 	if (p_ptr->object->coord2[0] == 0.0 && p_ptr->object->coord2[1] == 0.0 \
 	&& p_ptr->object->coord2[2] == 0.0)
 		error_free(p_ptr, "At least 1 coord. of cam. orient vec. must be != 0");
+	vec_normalize(p_ptr->object->coord2, 3);
 	if ((ft_isnumber(p_ptr->line_split[3])))
 	{
 		p_ptr->object->fov = minirt_atoi(p_ptr->line_split[3], p_ptr);

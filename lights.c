@@ -120,6 +120,7 @@ int
     {
         if (surface->obj_id < DIFF_SURFACE)
         {
+            // printf("Shadow ray on verge of shooting\n");
             store = p_ptr->func_arr_ptr[surface->obj_id](&shadow_ray, surface);
             if (store > 0.1 && pow(store, 2) < pow(max_dist, 2))
                 return (1);
@@ -140,18 +141,18 @@ int
     i = 0;
     rgb[0] = rgb[1] = rgb[2] = 0;
     light_ptr = p_ptr->object;
-    // vector_substraction(ray_ptr->n_normal, ray_ptr->vec_intersect, obj_ptr->coord1, 3);
-    // vec_scalar_product(ray_ptr->n_normal, 2 / obj_ptr->diameter, 3);
     while (light_ptr)
     {
         if (light_ptr->obj_id == light)
         {
             vector_substraction(ray_ptr->l_light_src, light_ptr->coord1, ray_ptr->vec_intersect, 3);
             if (!is_in_shadow(p_ptr, ray_ptr)) //important that l_light_src be not normalized before sent to is_in_shadow
-            { 
+            {
                 vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3); // Normalizing v_l
                 dot_l_n = max_d(0.0, dot_product(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
                 i = 0;
+                // printf("Dot_n_l: %f Normal: %f|%f|%f\n", dot_l_n, ray_ptr->n_normal[0], ray_ptr->n_normal[1], ray_ptr->n_normal[2]);
+                // printf("Light: %f|%f|%f\n", ray_ptr->l_light_src[0], ray_ptr->l_light_src[1], ray_ptr->l_light_src[2]);
                 while (i < 3)
                 {
                     rgb[i] += obj_ptr->rgb[i] * light_ptr->brightness * light_ptr->rgb[i] * dot_l_n;// + specular_reflexion(ray_ptr, light_ptr); //TBU: bcs specular reflexion is added, if light color is black, there is still reflexion
