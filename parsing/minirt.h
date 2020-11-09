@@ -19,6 +19,7 @@
 
 #define PHONG_EXPONENT 100.0
 #define	DIFF_SURFACE 5
+#define	JEAN 0.000001
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
@@ -160,5 +161,13 @@ void			vec_normalize(double *vec, int dimension);
 int				convert_rgb_format(double *rgb_arr);
 double			max_d(double nb1, double nb2);
 int				get_color(t_param *p_ptr, t_ray *ray_ptr, t_object *obj_ptr);
+
+//INTERSECTIONS
+
+double			sphere_intersect(t_ray *ray_ptr, t_object *sphere);
+double			get_plane_intersect(t_ray *ray_ptr, double *plane_origin, double *plane_n);
+double			plane_intersect(t_ray *ray_ptr, t_object *plane_ptr);
+double			square_intersect(t_ray *ray_ptr, t_object *square_ptr);
+double			triangle_intersect(t_ray *ray_ptr, t_object *tri_ptr);
 
 #endif

@@ -122,7 +122,7 @@ int
         {
             // printf("Shadow ray on verge of shooting\n");
             store = p_ptr->func_arr_ptr[surface->obj_id](&shadow_ray, surface);
-            if (store > 0.1 && pow(store, 2) < pow(max_dist, 2))
+            if (store > JEAN && pow(store, 2) < pow(max_dist, 2))
                 return (1);
         }
         surface = surface->next_object;

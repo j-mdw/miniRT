@@ -1,7 +1,7 @@
 TEST_FILES = parsing/parse_main.c parsing/parse_params_1.c parsing/parse_params_2.c parsing/parse_params_3.c \
 			parsing/parse_utils_1.c parsing/parse_errors_free.c parsing/gnl/get_next_line.c \
 			parsing/gnl/get_next_line_utils.c parsing/parse_utils_2.c parsing/parse_utils_3.c shoot_ray.c \
-			my_mlx_pixel_put.c vectors_utils_1.c vectors_utils_2.c lights.c
+			my_mlx_pixel_put.c vectors_utils_1.c vectors_utils_2.c lights.c intersections.c
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 all: 
