@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 static void
 	get_id(t_param *p_ptr)
@@ -34,7 +34,7 @@ static void
 	else if (!ft_strcmp(*p_ptr->line_split, "tr"))
 		parse_triangle(p_ptr);
 	else
-		error_free(p_ptr, "Incorrect identifier (from Get_ID)");
+		error_free(p_ptr, "Unknown identifier");
 }
 
 int
@@ -44,23 +44,21 @@ int
 
 	while ((gnl = get_next_line(p_ptr->fd, &p_ptr->line)) > 0)
 	{
-		printf("Line: %s\n", p_ptr->line);
 		replace_char(p_ptr->line, '\t', ' ');
-		if (p_ptr->line[0]) /* Checking if line is not '\0' which corresponds to an empty line in the file */
+		if (p_ptr->line[0])
 		{
 			if (!(p_ptr->line_split = ft_split(p_ptr->line, ' ')))
 				error_free(p_ptr, "Split Error");
-			if ((p_ptr->line_split[0])) /* Checking if *line_split != NULL - this would happen if line was only white spaces */
+			if ((p_ptr->line_split[0]))
 				get_id(p_ptr);
 		}
 		if (p_ptr->line_split)
 			free_2d_array(&p_ptr->line_split);
 		free(p_ptr->line);
 	}
-	printf("GNL RETURN: %d\n", gnl);
 	if (gnl < 0)
 		error_free(p_ptr, "Could not read file");
-	if (!(p_ptr->res_found) || !(p_ptr->amb_light_found))
-		error_free(p_ptr, "Missing parameter Resolution or Ambiant Light");
+	if (!(p_ptr->res_found) || !(p_ptr->amb_light_found) || !(p_ptr->cam_found))
+		error_free(p_ptr, "Missing parameter Resolution, Amb. Light or camera");
 	return (1);
 }

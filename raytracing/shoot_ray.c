@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 t_object
     *get_object(t_object *obj_ptr, int obj_id)

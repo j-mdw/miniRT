@@ -26,13 +26,14 @@
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx-linux/mlx_int.h"
 # include <unistd.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <stddef.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <math.h>
+#include <limits.h>
+#include <stdio.h>
 
 typedef enum	e_param_id {
 	sphere,
@@ -96,6 +97,7 @@ typedef	struct	s_param {
 	int			fd;
 	int			res_found;
 	int			amb_light_found;
+	int			cam_found;
 	int			res_x;
 	int			res_y;
 	double		light_ratio;
@@ -147,9 +149,9 @@ void			set_pov_plan(double *orient_vec, t_ray *ray_ptr);
 //VECTORS
 
 void			vec_scalar_product(double *vector, double scalar, int dimension);
-double			dot_product(double *vec1, double *vec2, int dimension);
+double			dot_prod(double *vec1, double *vec2, int dimension);
 void			vector_addition(double *result, double *vec1, double *vec2, int dimension);
-void			vector_substraction(double *result, double *vec1, double *vec2, int dimension);
+void			vec_substract(double *result, double *vec1, double *vec2, int dimension);
 double			vector_magnitude(double *vec, int dimension);
 void			cross_product(double *dst, double *vec1, double *vec2);
 void			vec_add_scalar(double *vec, double scalar, int dimension);
@@ -169,5 +171,11 @@ double			get_plane_intersect(t_ray *ray_ptr, double *plane_origin, double *plane
 double			plane_intersect(t_ray *ray_ptr, t_object *plane_ptr);
 double			square_intersect(t_ray *ray_ptr, t_object *square_ptr);
 double			triangle_intersect(t_ray *ray_ptr, t_object *tri_ptr);
+double			cylinder_intersect(t_ray *ray_ptr, t_object *cy_ptr);
 
+//HOOKS
+
+int				deal_key(int key, void *param);
+int				deal_mouse(int button, int x, int y, void *param);
+int				deal_hook(void *params);
 #endif

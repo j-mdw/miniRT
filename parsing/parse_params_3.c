@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 void
 	parse_plane(t_param *p_ptr)
@@ -72,10 +72,10 @@ void
 		i++;
 	if (i != 3)
 		error_free(p_ptr, "Orientation vector inputs not in range [-1,1]");
-	vec_normalize(p_ptr->object->coord2, 3);	
-	get_rgb(p_ptr, p_ptr->line_split[3], p_ptr->object->rgb);
-	p_ptr->object->diameter = atoitod(p_ptr, p_ptr->line_split[4]);
-	p_ptr->object->height = atoitod(p_ptr, p_ptr->line_split[5]);
+	vec_normalize(p_ptr->object->coord2, 3);
+	p_ptr->object->diameter = atoitod(p_ptr, p_ptr->line_split[3]);
+	p_ptr->object->height = atoitod(p_ptr, p_ptr->line_split[4]);
+	get_rgb(p_ptr, p_ptr->line_split[5], p_ptr->object->rgb);
 }
 
 void

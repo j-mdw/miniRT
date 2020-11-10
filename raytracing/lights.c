@@ -1,4 +1,4 @@
-#include "parsing/minirt.h"
+#include "../minirt.h"
 
 int
     convert_rgb_format(double *rgb_arr)
@@ -50,7 +50,7 @@ double
     vec_scalar_product(ray_ptr->v_cam_eye, (-1.0 / vector_magnitude(ray_ptr->v_cam_eye, 3)), 3);
     vector_addition(vec_h, ray_ptr->v_cam_eye, ray_ptr->l_light_src, 3);
     vec_scalar_product(vec_h, (1 / vector_magnitude(vec_h, 3)), 3);
-    return (spec_coeff * light_ptr->brightness * pow(max_d(0.0, dot_product(ray_ptr->n_normal, vec_h, 3)), PHONG_EXPONENT));
+    return (spec_coeff * light_ptr->brightness * pow(max_d(0.0, dot_prod(ray_ptr->n_normal, vec_h, 3)), PHONG_EXPONENT));
 }
 /*
 int
@@ -75,13 +75,13 @@ int
             while (i < 3)
             {
                 ray_ptr->n_normal[i] = (ray_ptr->vec_intersect[i] - obj_ptr->coord1[i]) / (obj_ptr->diameter / 2);
-                ray_ptr->l_light_src[i] = (light_ptr->coord1[i] - ray_ptr->vec_intersect[i]); /// dot_product(light_ptr->coord1, ray_ptr->tmp_vec, 3);
+                ray_ptr->l_light_src[i] = (light_ptr->coord1[i] - ray_ptr->vec_intersect[i]); /// dot_prod(light_ptr->coord1, ray_ptr->tmp_vec, 3);
                 i++;
             }
             vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3);
             // printf("ray_ptr->n_normal: %f|%f|%f|%f\n", ray_ptr->n_normal[0], ray_ptr->n_normal[1], ray_ptr->n_normal[2], vector_magnitude(ray_ptr->n_normal, 3));
             // printf("ray_ptr->l_light_src: %f|%f|%f|%f\n", ray_ptr->l_light_src[0], ray_ptr->l_light_src[1], ray_ptr->l_light_src[2], vector_magnitude(ray_ptr->l_light_src, 3));
-            dot_l_n = max_d(0.0, dot_product(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
+            dot_l_n = max_d(0.0, dot_prod(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
             // printf("dot n.l: %f\n", dot_l_n);
             // if (dot_l_n == 0.0)
                 // return (convert_rgb_format(p_ptr->light_rgb));  UNCOMMENT THIS ONCE FULLY FUNCTIONAL - USEFUL FOR DEBUGGING 
@@ -145,11 +145,11 @@ int
     {
         if (light_ptr->obj_id == light)
         {
-            vector_substraction(ray_ptr->l_light_src, light_ptr->coord1, ray_ptr->vec_intersect, 3);
+            vec_substract(ray_ptr->l_light_src, light_ptr->coord1, ray_ptr->vec_intersect, 3);
             if (!is_in_shadow(p_ptr, ray_ptr)) //important that l_light_src be not normalized before sent to is_in_shadow
             {
                 vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3); // Normalizing v_l
-                dot_l_n = max_d(0.0, dot_product(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
+                dot_l_n = max_d(0.0, dot_prod(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
                 i = 0;
                 // printf("Dot_n_l: %f Normal: %f|%f|%f\n", dot_l_n, ray_ptr->n_normal[0], ray_ptr->n_normal[1], ray_ptr->n_normal[2]);
                 // printf("Light: %f|%f|%f\n", ray_ptr->l_light_src[0], ray_ptr->l_light_src[1], ray_ptr->l_light_src[2]);

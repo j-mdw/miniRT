@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 int
 	ft_isnumber(char *s)
@@ -47,7 +47,6 @@ double
 	if (s[i] == '-')
 	{
 		sign = sign * -1;
-		/* i++ here to save lines */
 		s++;
 	}
 	while (ft_isdigit(s[i]))
@@ -90,14 +89,6 @@ void
 	}
 	free_2d_array(&p_ptr->extra_split);
 }
-
-/*
-			store = minirt_atoi(p_ptr->extra_split[i], p_ptr);
-			if (store >= 0 && store <= 255 && ++i)
-				rgb = (rgb << 8) + store;
-			else
-				error_free(p_ptr, "RGB value out of 0-255 range");
-*/
 
 void
 	get_coord(char *s, double arr[], t_param *p_ptr, int size)

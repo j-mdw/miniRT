@@ -1,4 +1,4 @@
-#include "parsing/minirt.h"
+#include "../minirt.h"
 
 void
     cross_product(double *dst, double *vec1, double *vec2)

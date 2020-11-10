@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 void
 	del_all_elem(t_object *object_ptr)
@@ -44,32 +44,26 @@ void
 	free_all(t_param *param)
 {
 	if (param->line)
-	{
-		printf("There is a line, the line is: |%s|\n", param->line);
 		free(param->line);
-		printf("Parameter 'Line' freed\n");
-	}
 	if (param->line_split)
-	{
 		free_2d_array(&(param->line_split));
-		printf("Line split freed\n");
-	}
 	if (param->extra_split)
-	{
 		free_2d_array(&(param->extra_split));
-		printf("Extra split freed\n");
-	}
 	if (param->object)
 		del_all_elem(param->object);
-	printf("End of Free_All function\n");
 }
 
 void
 	error_free(t_param *p_ptr, char *error_message)
 {
-	printf("%s\n", error_message);
+	ft_putstr_fd(error_message, 1);
+	ft_putchar_fd('\n', 1);
 	if (p_ptr->line)
-		printf("ERROR, line: %s\n", p_ptr->line);
+	{
+		ft_putstr_fd("Error on line: ", 1);
+		ft_putstr_fd(p_ptr->line, 1);
+		ft_putchar_fd('\n', 1);
+	}
 	free_all(p_ptr);
 	close(p_ptr->fd);
 	exit(1);

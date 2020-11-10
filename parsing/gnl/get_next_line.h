@@ -16,11 +16,11 @@
 # include <stdlib.h>
 # define BUFFER_SIZE 128
 
-int	get_next_line(int fd, char **line);
+int		get_next_line(int fd, char **line);
 void	gnl_strcpy(char *dst, const char *src);
 char	*gnl_strjoin(char const *s1, char const *s2);
 char	*gnl_strchr(const char *s, int c);
-int	gnl_strlen(const char *s);
-int	ft_gnl(char **line, char *buffer);
+int		gnl_strlen(const char *s);
+int		ft_gnl(char **line, char *buffer);
 
 #endif

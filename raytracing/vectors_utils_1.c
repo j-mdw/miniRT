@@ -1,4 +1,4 @@
-#include "parsing/minirt.h"
+#include "../minirt.h"
 
 void
     vec_scalar_product(double *vector, double scalar, int dimension)
@@ -14,7 +14,7 @@ void
 }
 
 double
-    dot_product(double *vec1, double *vec2, int dimension)
+    dot_prod(double *vec1, double *vec2, int dimension)
 {
     int     i;
     double  result;
@@ -43,7 +43,7 @@ void
 }
 
 void
-    vector_substraction(double *result, double *vec1, double *vec2, int dimension)
+    vec_substract(double *result, double *vec1, double *vec2, int dimension)
 {
     int     i;
 

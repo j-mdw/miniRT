@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 void
 	parse_resolution(t_param *p_ptr)
@@ -56,21 +56,16 @@ void
 void
 	parse_camera(t_param *p_ptr)
 {
-	int			i;
-
 	if (array_size(p_ptr->line_split) != 4)
 		error_free(p_ptr, "Incorrect nb of arguments for Camera");
 	add_new_elem_front(p_ptr);
 	p_ptr->object->obj_id = camera;
 	get_coord(p_ptr->line_split[1], p_ptr->object->coord1, p_ptr, 3);
 	get_coord(p_ptr->line_split[2], p_ptr->object->coord2, p_ptr, 3);
-	i = 0;
-	while (i < 3)
-	{
-		if (p_ptr->object->coord2[i] < -1.0 || p_ptr->object->coord2[i] > 1.0)
-			error_free(p_ptr, "Orientation vector out of [-1,1] range");
-		i++;
-	}
+	if ((p_ptr->object->coord2[0] < -1.0 || p_ptr->object->coord2[0] > 1.0) \
+	|| (p_ptr->object->coord2[1] < -1.0 || p_ptr->object->coord2[1] > 1.0) \
+	|| (p_ptr->object->coord2[2] < -1.0 || p_ptr->object->coord2[2] > 1.0))
+		error_free(p_ptr, "Orientation vector out of [-1,1] range");
 	if (p_ptr->object->coord2[0] == 0.0 && p_ptr->object->coord2[1] == 0.0 \
 	&& p_ptr->object->coord2[2] == 0.0)
 		error_free(p_ptr, "At least 1 coord. of cam. orient vec. must be != 0");
@@ -83,6 +78,7 @@ void
 	}
 	else
 		error_free(p_ptr, "Camera FOV not a number");
+	p_ptr->cam_found += 1;
 }
 
 void
