@@ -10,14 +10,14 @@
 //     if ((tmp_val = plane_intersect(ray_ptr, square_ptr)) > 0.0)
 //     {
 //         // printf("Were here\n");
-//         vector_copy(ray_ptr->direction, ray_plane, 3);
-//         vec_scalar_product(ray_plane, tmp_val, 3);
-//         vector_addition(ray_plane, ray_plane, ray_ptr->origin, 3);
+//         vec_copy(ray_ptr->direction, ray_plane, 3);
+//         vec_scalarprod(ray_plane, tmp_val, 3);
+//         vec_addition(ray_plane, ray_plane, ray_ptr->origin, 3);
 //         vec_substract(sq_to_inter, ray_plane, square_ptr->coord1, 3);
-//         // printf("Length: %f, Height: %f, max length: %f\n", vector_magnitude(sq_to_inter, 3), square_ptr->height, sqrt(pow(square_ptr->height / 2, 2) * 2));
-//         if (vector_magnitude(sq_to_inter, 3) <= sqrt(pow(square_ptr->height / 2, 2) * 2))
+//         // printf("Length: %f, Height: %f, max length: %f\n", vec_magnit(sq_to_inter, 3), square_ptr->height, sqrt(pow(square_ptr->height / 2, 2) * 2));
+//         if (vec_magnit(sq_to_inter, 3) <= sqrt(pow(square_ptr->height / 2, 2) * 2))
 //         {
-//             // printf("Center to intersection distance: %f\n", vector_magnitude(sq_to_inter, 3));
+//             // printf("Center to intersection distance: %f\n", vec_magnit(sq_to_inter, 3));
 //             return (tmp_val);
 //         }
 //     }

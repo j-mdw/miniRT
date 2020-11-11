@@ -20,6 +20,7 @@
 #define PHONG_EXPONENT 100.0
 #define	DIFF_SURFACE 5
 #define	JEAN 0.000001
+#define	STEP 16
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
@@ -94,6 +95,7 @@ typedef struct s_quadratic {
 typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
 
 typedef	struct	s_param {
+	int			step;
 	int			fd;
 	int			res_found;
 	int			amb_light_found;
@@ -148,14 +150,14 @@ void			set_pov_plan(double *orient_vec, t_ray *ray_ptr);
 
 //VECTORS
 
-void			vec_scalar_product(double *vector, double scalar, int dimension);
+void			vec_scalarprod(double *vector, double scalar, int dimension);
 double			dot_prod(double *vec1, double *vec2, int dimension);
-void			vector_addition(double *result, double *vec1, double *vec2, int dimension);
+void			vec_addition(double *result, double *vec1, double *vec2, int dimension);
 void			vec_substract(double *result, double *vec1, double *vec2, int dimension);
-double			vector_magnitude(double *vec, int dimension);
+double			vec_magnit(double *vec, int dimension);
 void			cross_product(double *dst, double *vec1, double *vec2);
 void			vec_add_scalar(double *vec, double scalar, int dimension);
-void			vector_copy(double *src, double *dst, int dimension);
+void			vec_copy(double *src, double *dst, int dimension);
 void			vec_normalize(double *vec, int dimension);
 
 //SHADING
@@ -167,7 +169,7 @@ int				get_color(t_param *p_ptr, t_ray *ray_ptr, t_object *obj_ptr);
 //INTERSECTIONS
 
 double			sphere_intersect(t_ray *ray_ptr, t_object *sphere);
-double			get_plane_intersect(t_ray *ray_ptr, double *plane_origin, double *plane_n);
+double			get_plane_intersec(t_ray *ray_ptr, double *plane_origin, double *plane_n);
 double			plane_intersect(t_ray *ray_ptr, t_object *plane_ptr);
 double			square_intersect(t_ray *ray_ptr, t_object *square_ptr);
 double			triangle_intersect(t_ray *ray_ptr, t_object *tri_ptr);
@@ -178,4 +180,7 @@ double			cylinder_intersect(t_ray *ray_ptr, t_object *cy_ptr);
 int				deal_key(int key, void *param);
 int				deal_mouse(int button, int x, int y, void *param);
 int				deal_hook(void *params);
+
+//REMOVE
+void			print_vec(double *vec);
 #endif

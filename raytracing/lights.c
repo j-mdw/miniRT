@@ -46,10 +46,10 @@ double
     double  vec_h[3];
     double  spec_coeff = 0.5;
 
-    vector_copy(ray_ptr->direction, ray_ptr->v_cam_eye, 3); /* Eventually, v_cam_eye and vec_h computation could  be done in get_color */
-    vec_scalar_product(ray_ptr->v_cam_eye, (-1.0 / vector_magnitude(ray_ptr->v_cam_eye, 3)), 3);
-    vector_addition(vec_h, ray_ptr->v_cam_eye, ray_ptr->l_light_src, 3);
-    vec_scalar_product(vec_h, (1 / vector_magnitude(vec_h, 3)), 3);
+    vec_copy(ray_ptr->direction, ray_ptr->v_cam_eye, 3); /* Eventually, v_cam_eye and vec_h computation could  be done in get_color */
+    vec_scalarprod(ray_ptr->v_cam_eye, (-1.0 / vec_magnit(ray_ptr->v_cam_eye, 3)), 3);
+    vec_addition(vec_h, ray_ptr->v_cam_eye, ray_ptr->l_light_src, 3);
+    vec_scalarprod(vec_h, (1 / vec_magnit(vec_h, 3)), 3);
     return (spec_coeff * light_ptr->brightness * pow(max_d(0.0, dot_prod(ray_ptr->n_normal, vec_h, 3)), PHONG_EXPONENT));
 }
 /*
@@ -62,9 +62,9 @@ int
     int         i;
 
     light_ptr = p_ptr->object;
-    vector_copy(ray_ptr->vec_intersect, ray_ptr->tmp_vec, 3);
-    vec_scalar_product(ray_ptr->tmp_vec, -1.0, 3);
-    // printf("vec_intersect * -1: %f|%f|%f|%f\n", ray_ptr->vec_intersect[0], ray_ptr->vec_intersect[1], ray_ptr->vec_intersect[2], vector_magnitude(ray_ptr->vec_intersect, 3));
+    vec_copy(ray_ptr->vec_intersect, ray_ptr->tmp_vec, 3);
+    vec_scalarprod(ray_ptr->tmp_vec, -1.0, 3);
+    // printf("vec_intersect * -1: %f|%f|%f|%f\n", ray_ptr->vec_intersect[0], ray_ptr->vec_intersect[1], ray_ptr->vec_intersect[2], vec_magnit(ray_ptr->vec_intersect, 3));
     // while (light_ptr)
     // {
         while (light_ptr->obj_id != light)
@@ -78,9 +78,9 @@ int
                 ray_ptr->l_light_src[i] = (light_ptr->coord1[i] - ray_ptr->vec_intersect[i]); /// dot_prod(light_ptr->coord1, ray_ptr->tmp_vec, 3);
                 i++;
             }
-            vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3);
-            // printf("ray_ptr->n_normal: %f|%f|%f|%f\n", ray_ptr->n_normal[0], ray_ptr->n_normal[1], ray_ptr->n_normal[2], vector_magnitude(ray_ptr->n_normal, 3));
-            // printf("ray_ptr->l_light_src: %f|%f|%f|%f\n", ray_ptr->l_light_src[0], ray_ptr->l_light_src[1], ray_ptr->l_light_src[2], vector_magnitude(ray_ptr->l_light_src, 3));
+            vec_scalarprod(ray_ptr->l_light_src, (1 / vec_magnit(ray_ptr->l_light_src, 3)), 3);
+            // printf("ray_ptr->n_normal: %f|%f|%f|%f\n", ray_ptr->n_normal[0], ray_ptr->n_normal[1], ray_ptr->n_normal[2], vec_magnit(ray_ptr->n_normal, 3));
+            // printf("ray_ptr->l_light_src: %f|%f|%f|%f\n", ray_ptr->l_light_src[0], ray_ptr->l_light_src[1], ray_ptr->l_light_src[2], vec_magnit(ray_ptr->l_light_src, 3));
             dot_l_n = max_d(0.0, dot_prod(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
             // printf("dot n.l: %f\n", dot_l_n);
             // if (dot_l_n == 0.0)
@@ -111,11 +111,11 @@ int
     double      store;
     t_ray       shadow_ray;
 
-    max_dist = vector_magnitude(ray_ptr->l_light_src, 3);
+    max_dist = vec_magnit(ray_ptr->l_light_src, 3);
     surface = p_ptr->object;
-    vector_copy(ray_ptr->vec_intersect, shadow_ray.origin, 3);
-    vector_copy(ray_ptr->l_light_src, shadow_ray.direction, 3);
-    vec_scalar_product(shadow_ray.direction, (1 / max_dist), 3);
+    vec_copy(ray_ptr->vec_intersect, shadow_ray.origin, 3);
+    vec_copy(ray_ptr->l_light_src, shadow_ray.direction, 3);
+    vec_scalarprod(shadow_ray.direction, (1 / max_dist), 3);
     while (surface)
     {
         if (surface->obj_id < DIFF_SURFACE)
@@ -148,7 +148,7 @@ int
             vec_substract(ray_ptr->l_light_src, light_ptr->coord1, ray_ptr->vec_intersect, 3);
             if (!is_in_shadow(p_ptr, ray_ptr)) //important that l_light_src be not normalized before sent to is_in_shadow
             {
-                vec_scalar_product(ray_ptr->l_light_src, (1 / vector_magnitude(ray_ptr->l_light_src, 3)), 3); // Normalizing v_l
+                vec_scalarprod(ray_ptr->l_light_src, (1 / vec_magnit(ray_ptr->l_light_src, 3)), 3); // Normalizing v_l
                 dot_l_n = max_d(0.0, dot_prod(ray_ptr->n_normal, ray_ptr->l_light_src, 3));
                 i = 0;
                 // printf("Dot_n_l: %f Normal: %f|%f|%f\n", dot_l_n, ray_ptr->n_normal[0], ray_ptr->n_normal[1], ray_ptr->n_normal[2]);

@@ -13,7 +13,7 @@ t_object
 void
     set_pov_plan(double *orient_vec, t_ray *ray_ptr)
 {
-    vector_copy(orient_vec, ray_ptr->vec_w, 3);
+    vec_copy(orient_vec, ray_ptr->vec_w, 3);
     ray_ptr->vec_v[0] = 0;
     ray_ptr->vec_v[1] = -1;
     ray_ptr->vec_v[2] = 0;
@@ -71,19 +71,19 @@ void
     }
     if (obj_distance > 0.0)
     {
-        vector_copy(ray_ptr->direction, ray_ptr->vec_intersect, 3);
-        vec_scalar_product(ray_ptr->vec_intersect, obj_distance, 3);
-        vector_addition(ray_ptr->vec_intersect, ray_ptr->origin, ray_ptr->vec_intersect, 3);
+        vec_copy(ray_ptr->direction, ray_ptr->vec_intersect, 3);
+        vec_scalarprod(ray_ptr->vec_intersect, obj_distance, 3);
+        vec_addition(ray_ptr->vec_intersect, ray_ptr->origin, ray_ptr->vec_intersect, 3);
         if (closest_surface->obj_id == sphere)
         {
             vec_substract(ray_ptr->n_normal, ray_ptr->vec_intersect, closest_surface->coord1, 3);
-            vec_scalar_product(ray_ptr->n_normal, 2 / closest_surface->diameter, 3);
+            vec_scalarprod(ray_ptr->n_normal, 2 / closest_surface->diameter, 3);
         }
         if (closest_surface->obj_id == plane || closest_surface->obj_id == square)
         {
-            vector_copy(closest_surface->coord2, ray_ptr->n_normal, 3);
+            vec_copy(closest_surface->coord2, ray_ptr->n_normal, 3);
             if (dot_prod(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
-                vec_scalar_product(ray_ptr->n_normal, -1.0, 3);
+                vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
         }
         if (closest_surface->obj_id == triangle)
         {
@@ -92,13 +92,13 @@ void
             cross_product(ray_ptr->n_normal, tmp_vec1, tmp_vec2);
             vec_normalize(ray_ptr->n_normal, 3);
             if (dot_prod(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
-                vec_scalar_product(ray_ptr->n_normal, -1.0, 3);
+                vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
         }
         if (closest_surface->obj_id == cylinder)
         {
             vec_substract(tmp_vec1, ray_ptr->vec_intersect, closest_surface->coord1, 3);
-            vector_copy(closest_surface->coord2, tmp_vec2, 3);
-            vec_scalar_product(tmp_vec2, dot_prod(tmp_vec1, tmp_vec2, 3), 3);
+            vec_copy(closest_surface->coord2, tmp_vec2, 3);
+            vec_scalarprod(tmp_vec2, dot_prod(tmp_vec1, tmp_vec2, 3), 3);
             vec_substract(ray_ptr->n_normal, tmp_vec1, tmp_vec2, 3);
             vec_normalize(ray_ptr->n_normal, 3);
         }
@@ -124,9 +124,9 @@ int
         i++;
     }
     set_pov_plan(p_ptr->current_camera->coord2, &ray);
-    vec_scalar_product(ray.vec_w, ray.screen_dist, 3); /* Computing direction vector as origin + (distance * direction(unitary)) */
-    vector_copy(ray.vec_u, ray.unit_u, 3);
-    vector_copy(ray.vec_v, ray.unit_v, 3);
+    vec_scalarprod(ray.vec_w, ray.screen_dist, 3); /* Computing direction vector as origin + (distance * direction(unitary)) */
+    vec_copy(ray.vec_u, ray.unit_u, 3);
+    vec_copy(ray.vec_v, ray.unit_v, 3);
     x = 0;
     while(x < p_ptr->res_x)
     {
@@ -139,8 +139,8 @@ int
             ray.vec_v[0] = ray.unit_v[0] * ((((double)p_ptr->res_y) / 2.0) - y);
             ray.vec_v[1] = ray.unit_v[1] * ((((double)p_ptr->res_y) / 2.0) - y);
             ray.vec_v[2] = ray.unit_v[2] * ((((double)p_ptr->res_y) / 2.0) - y);
-            vector_addition(ray.direction, ray.vec_u, ray.vec_v, 3);
-            vector_addition(ray.direction, ray.direction, ray.vec_w, 3);
+            vec_addition(ray.direction, ray.vec_u, ray.vec_v, 3);
+            vec_addition(ray.direction, ray.direction, ray.vec_w, 3);
             vec_normalize(ray.direction, 3);
             // printf("ray_y: |%f|%f|%f|\n", ray.direction[0], ray.direction[1], ray.direction[2]);
             shoot_ray(p_ptr, &ray, x, y);

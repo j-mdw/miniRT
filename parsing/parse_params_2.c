@@ -50,7 +50,7 @@ void
 			error_free(p_ptr, "Light ratio not in  [0.0,1.0]");
 		get_rgb(p_ptr, p_ptr->line_split[2], p_ptr->light_rgb);
 	}
-	vec_scalar_product(p_ptr->light_rgb, p_ptr->light_ratio, 3);
+	vec_scalarprod(p_ptr->light_rgb, p_ptr->light_ratio, 3);
 }
 
 void

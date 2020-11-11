@@ -3,9 +3,14 @@
 void
     cross_product(double *dst, double *vec1, double *vec2)
 {
-    dst[0] = (vec1[1] * vec2[2]) - (vec1[2] * vec2[1]);
-    dst[1] = (vec1[2] * vec2[0]) - (vec1[0] * vec2[2]);
-    dst[2] = (vec1[0] * vec2[1]) - (vec1[1] * vec2[0]);
+    double  tmp_vec[3];
+
+    tmp_vec[0] = (vec1[1] * vec2[2]) - (vec1[2] * vec2[1]);
+    tmp_vec[1] = (vec1[2] * vec2[0]) - (vec1[0] * vec2[2]);
+    tmp_vec[2] = (vec1[0] * vec2[1]) - (vec1[1] * vec2[0]);
+    dst[0] = tmp_vec[0];
+    dst[1] = tmp_vec[1];
+    dst[2] = tmp_vec[2];
 }
 
 void
@@ -22,7 +27,7 @@ void
 }
 
 void
-    vector_copy(double *src, double *dst, int dimension)
+    vec_copy(double *src, double *dst, int dimension)
 {
     int i;
 
@@ -39,6 +44,6 @@ void
 {
     double  magnitude;
 
-    magnitude = vector_magnitude(vec, dimension);
-    vec_scalar_product(vec, 1 / magnitude, dimension);
+    magnitude = vec_magnit(vec, dimension);
+    vec_scalarprod(vec, 1 / magnitude, dimension);
 }

@@ -1,7 +1,7 @@
 #include "../minirt.h"
 
 void
-    vec_scalar_product(double *vector, double scalar, int dimension)
+    vec_scalarprod(double *vector, double scalar, int dimension)
 {
     int i;
 
@@ -30,7 +30,7 @@ double
 }
 
 void
-    vector_addition(double *result, double *vec1, double *vec2, int dimension)
+    vec_addition(double *result, double *vec1, double *vec2, int dimension)
 {
     int     i;
 
@@ -56,7 +56,7 @@ void
 }
 
 double
-    vector_magnitude(double *vec, int dimension)
+    vec_magnit(double *vec, int dimension)
 {
     int     i;
     double  result;

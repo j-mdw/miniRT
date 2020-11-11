@@ -24,6 +24,7 @@ void
 	param_ptr->line_split = NULL;
 	param_ptr->object = NULL;
 	param_ptr->extra_split = NULL;
+	param_ptr->step = STEP;
 }
 
 void
@@ -82,6 +83,20 @@ int
 	parse_params(p_ptr);
 	print_parameters(p_ptr);
 	return (1);
+}
+
+//REMOVE EVENTUALLY
+void
+    print_vec(double *vec)
+{
+    int i = 0;
+
+    while (i < 3)
+    {
+        printf("|%.4f|", vec[i]);
+        i++;
+    }
+    printf("\n");
 }
 
 int	main(int argc, char **argv)
