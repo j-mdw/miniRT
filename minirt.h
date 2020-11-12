@@ -21,6 +21,9 @@
 #define	DIFF_SURFACE 5
 #define	JEAN 0.000001
 #define	STEP 16
+#define	MOVE_SPEED 5.0
+#define	ANGLE 5.0
+#define	RADIAN(X) ((X / 180.0) * M_PI)
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
@@ -73,6 +76,7 @@ typedef	struct	s_ray {
 	double		n_normal[3];
 	double		l_light_src[3];
 	double		tmp_vec[3];
+	double		obj_dist;
 }				t_ray;
 
 typedef struct s_pix_data {
@@ -147,6 +151,7 @@ void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
 void			init_func_arr(t_args_func *func_arr);
 t_object		*get_object(t_object *obj_ptr, int obj_id);
 void			set_pov_plan(double *orient_vec, t_ray *ray_ptr);
+void			set_normal(t_object *surface, t_ray *ray_ptr);
 
 //VECTORS
 

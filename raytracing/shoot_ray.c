@@ -20,9 +20,9 @@ void
     if (ray_ptr->vec_w[0] == 0 && (ray_ptr->vec_w[1] == -1 || \
     ray_ptr->vec_w[1] == 1) && ray_ptr->vec_w[2] == 0)
     {
-        ray_ptr->vec_v[0] = 0;
+        ray_ptr->vec_v[0] = -1;
         ray_ptr->vec_v[1] = 0;
-        ray_ptr->vec_v[2] = -1;
+        ray_ptr->vec_v[2] = 0;
     }
     cross_product(ray_ptr->vec_u, ray_ptr->vec_w, ray_ptr->vec_v);
     cross_product(ray_ptr->vec_v, ray_ptr->vec_w, ray_ptr->vec_u);
@@ -38,42 +38,6 @@ void
     func_arr[square] = square_intersect;
     func_arr[triangle] = triangle_intersect;
     func_arr[cylinder] = cylinder_intersect;
-}
-
-void
-    set_normal(t_object *surface, t_ray *ray_ptr)
-{
-    double  tmp_vec1[3];
-    double  tmp_vec2[3];
-
-    if (surface->obj_id == sphere)
-    {
-        vec_substract(ray_ptr->n_normal, ray_ptr->vec_intersect, surface->coord1, 3);
-        vec_scalarprod(ray_ptr->n_normal, 2 / surface->diameter, 3);
-    }
-    if (surface->obj_id == plane || surface->obj_id == square)
-    {
-        vec_copy(surface->coord2, ray_ptr->n_normal, 3);
-        if (dot_prod(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
-            vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
-    }
-    if (surface->obj_id == triangle)
-    {
-        vec_substract(tmp_vec1, surface->coord2, surface->coord1, 3);
-        vec_substract(tmp_vec2, surface->coord3, surface->coord2, 3);
-        cross_product(ray_ptr->n_normal, tmp_vec1, tmp_vec2);
-        vec_normalize(ray_ptr->n_normal, 3);
-        if (dot_prod(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
-            vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
-    }
-    if (surface->obj_id == cylinder)
-    {
-        vec_substract(tmp_vec1, ray_ptr->vec_intersect, surface->coord1, 3);
-        vec_copy(surface->coord2, tmp_vec2, 3);
-        vec_scalarprod(tmp_vec2, dot_prod(tmp_vec1, tmp_vec2, 3), 3);
-        vec_substract(ray_ptr->n_normal, tmp_vec1, tmp_vec2, 3);
-        vec_normalize(ray_ptr->n_normal, 3);
-    }
 }
 
 void
@@ -136,10 +100,8 @@ void
     set_camera_plan(t_param *p_ptr, t_ray *ray_ptr)
 {
     ray_ptr->screen_dist = (((double)p_ptr->res_x) / 2.0) / \
-    tan((((double)p_ptr->current_camera->fov) / (2.0 * 180.0)) * M_PI);
-    ray_ptr->origin[0] = p_ptr->current_camera->coord1[0];
-    ray_ptr->origin[1] = p_ptr->current_camera->coord1[1];
-    ray_ptr->origin[2] = p_ptr->current_camera->coord1[2];
+    tan(RADIAN(((double)p_ptr->current_camera->fov) / (2.0)));
+    vec_copy(p_ptr->current_camera->coord1, ray_ptr->origin, 3);
     set_pov_plan(p_ptr->current_camera->coord2, ray_ptr);
     vec_scalarprod(ray_ptr->vec_w, ray_ptr->screen_dist, 3);
     vec_copy(ray_ptr->vec_u, ray_ptr->unit_u, 3);

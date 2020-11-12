@@ -51,7 +51,7 @@ static double
 
 	set_pov_plan(sq_ptr->coord2, &pov_plan);
 	if ((side_dist = fabs(dot_prod(pov_plan.vec_u, vec, 3))) \
-	<= ((cos(45.0 / 180.0 * M_PI))))
+	<= ((cos(RADIAN(45.0)))))
 		side_dist = fabs(dot_prod(pov_plan.vec_v, vec, 3));
 	side_dist = (sq_ptr->height / 2) / side_dist;
 	return (side_dist);

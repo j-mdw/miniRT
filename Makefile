@@ -6,7 +6,8 @@ TEST_FILES = main.c my_mlx_pixel_put.c hooks.c\
 			parsing/parse_utils_3.c \
 			raytracing/shoot_ray.c raytracing/lights.c \
 			raytracing/intersections_1.c raytracing/intersections_2.c \
-			raytracing/vectors_utils_1.c raytracing/vectors_utils_2.c
+			raytracing/vectors_utils_1.c raytracing/vectors_utils_2.c \
+			raytracing/set_normals.c
 	
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 

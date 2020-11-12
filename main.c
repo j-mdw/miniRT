@@ -93,10 +93,10 @@ void
 
     while (i < 3)
     {
-        printf("|%.4f|", vec[i]);
+        printf("|%8.4f", vec[i]);
         i++;
     }
-    printf("\n");
+    printf("|\n");
 }
 
 int	main(int argc, char **argv)
