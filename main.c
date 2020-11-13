@@ -25,6 +25,7 @@ void
 	param_ptr->object = NULL;
 	param_ptr->extra_split = NULL;
 	param_ptr->step = STEP;
+	param_ptr->selected_obj = NULL;
 }
 
 void

@@ -13,17 +13,17 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-#ifndef M_PI
-# define M_PI acos(-1.0)
+#ifndef		M_PI
+# define	M_PI acos(-1.0)
 #endif
 
-#define PHONG_EXPONENT 100.0
-#define	DIFF_SURFACE 5
-#define	JEAN 0.000001
-#define	STEP 16
-#define	MOVE_SPEED 5.0
-#define	ANGLE 5.0
-#define	RADIAN(X) ((X / 180.0) * M_PI)
+# define	PHONG_EXPONENT 100.0
+# define	DIFF_SURFACE 5
+# define	JEAN 0.000001
+# define	STEP 16
+# define	MOVE_SPEED 5.0
+# define	ANGLE 5.0
+# define	RADIAN(X) ((X / 180.0) * M_PI)
 
 # include "../libft/libft.h"
 # include "gnl/get_next_line.h"
@@ -36,8 +36,8 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <math.h>
-#include <limits.h>
-#include <stdio.h>
+# include <limits.h>
+# include <stdio.h>
 
 typedef enum	e_param_id {
 	sphere,
@@ -115,26 +115,30 @@ typedef	struct	s_param {
 	t_param_id	*elem_id;
 	t_object	*object;
 	t_object	*current_camera;
+	t_object	*closest_surface;
+	t_object	*selected_obj;
 	t_pix_data	*pix_ptr;
 	t_args_func	*func_arr_ptr;
 	void		*mlx_ptr;
 	void		*mlx_win_ptr;
 }				t_param;
 
-int				ft_strcmp(const char *s1, const char *s2);
-int				check_file_extansion(char *filename, char *file_extansion);
+void			add_new_elem_front(t_param *p_ptr);
+void			free_2d_array(char ***ptr);
+void			free_all(t_param *param);
+void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
+void			init_func_arr(t_args_func *func_arr);
+t_object		*get_object(t_object *obj_ptr, int obj_id);
+
+/* PARSING */
 int				ft_isblank(int c);
 void			replace_char(char *text, char find, char replace);
 int				parse_params(t_param *p_ptr);
-void			error_free(t_param *param, char *error_message);
-void			error_free(t_param *param, char *error_message);
-void			free_all(t_param *param);
+int				ft_strcmp(const char *s1, const char *s2);
 int				ft_isnumber(char *s);
 int				array_size(char **arr_ptr);
 double			atoitod(t_param *p_ptr, char *s);
 void			get_rgb(t_param *p_ptr, char *s, double *arr);
-void			add_new_elem_front(t_param *p_ptr);
-void			free_2d_array(char ***ptr);
 void			get_coord(char *s, double arr[], t_param *p_ptr, int size);
 void			parse_resolution(t_param *p_ptr);
 void			parse_amb_light(t_param *p_ptr);
@@ -146,14 +150,20 @@ void			parse_square(t_param *p_ptr);
 void			parse_cylinder(t_param *p_ptr);
 void			parse_triangle(t_param *p_ptr);
 int				minirt_atoi(char *s, t_param *p_ptr);
-int				ray_trace(t_param *p_ptr);
-void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
-void			init_func_arr(t_args_func *func_arr);
-t_object		*get_object(t_object *obj_ptr, int obj_id);
+
+/* ERROR MANAGEMENT */
+int				check_file_extansion(char *filename, char *file_extansion);
+void			error_free(t_param *param, char *error_message);
+void			error_free(t_param *param, char *error_message);
+
+/* RAYTRACING */
+void			set_camera_plan(t_param *p_ptr, t_ray *ray_ptr);
+void			ray_trace(t_param *p_ptr);
 void			set_pov_plan(double *orient_vec, t_ray *ray_ptr);
 void			set_normal(t_object *surface, t_ray *ray_ptr);
+double			set_closest(t_param *p_ptr, t_ray *ray_ptr);
 
-//VECTORS
+/* VECTORS */
 
 void			vec_scalarprod(double *vector, double scalar, int dimension);
 double			dot_prod(double *vec1, double *vec2, int dimension);
@@ -165,13 +175,13 @@ void			vec_add_scalar(double *vec, double scalar, int dimension);
 void			vec_copy(double *src, double *dst, int dimension);
 void			vec_normalize(double *vec, int dimension);
 
-//SHADING
+/* SHADING */
 
 int				convert_rgb_format(double *rgb_arr);
 double			max_d(double nb1, double nb2);
-int				get_color(t_param *p_ptr, t_ray *ray_ptr, t_object *obj_ptr);
+int				get_color(t_param *p_ptr, t_ray *ray_ptr);
 
-//INTERSECTIONS
+/* INTERSECTIONS */
 
 double			sphere_intersect(t_ray *ray_ptr, t_object *sphere);
 double			get_plane_intersec(t_ray *ray_ptr, double *plane_origin, double *plane_n);
@@ -180,12 +190,12 @@ double			square_intersect(t_ray *ray_ptr, t_object *square_ptr);
 double			triangle_intersect(t_ray *ray_ptr, t_object *tri_ptr);
 double			cylinder_intersect(t_ray *ray_ptr, t_object *cy_ptr);
 
-//HOOKS
+/* HOOKS */
 
 int				deal_key(int key, void *param);
 int				deal_mouse(int button, int x, int y, void *param);
 int				deal_hook(void *params);
 
-//REMOVE
+/* REMOVE */
 void			print_vec(double *vec);
 #endif
