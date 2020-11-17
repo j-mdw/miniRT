@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movements.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:09:54 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:09:55 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 void
@@ -31,8 +43,8 @@ void
 	vec_normalize(ray->vec_w, 3);
 	if (key == 'a' || key == 'd')
 	{
-		vec_scalarprod(ray->vec_w, cos(RADIAN(ANGLE)), 3);
-		vec_scalarprod(ray->vec_u, sin(RADIAN(ANGLE)), 3);
+		vec_scalarprod(ray->vec_w, cos(ANGLE / 180.0 * M_PI), 3);
+		vec_scalarprod(ray->vec_u, sin(ANGLE / 180.0 * M_PI), 3);
 		if (key == 'a')
 			vec_scalarprod(ray->vec_u, -1, 3);
 		vec_addition(obj_ptr->coord2, ray->vec_u, ray->vec_w, 3);
@@ -40,8 +52,8 @@ void
 	}
 	if (key == 'w' || key == 's')
 	{
-		vec_scalarprod(ray->vec_w, cos(RADIAN(ANGLE)), 3);
-		vec_scalarprod(ray->vec_v, sin(RADIAN(ANGLE)), 3);
+		vec_scalarprod(ray->vec_w, cos(ANGLE / 180.0 * M_PI), 3);
+		vec_scalarprod(ray->vec_v, sin(ANGLE / 180.0 * M_PI), 3);
 		if (key == 'w')
 		{
 			vec_scalarprod(ray->vec_v, -1, 3);
@@ -70,7 +82,7 @@ void
 		if ((new_size = obj_ptr->height + delta) < INT_MAX && new_size > 0)
 			obj_ptr->height += delta;
 	}
-	if (obj_ptr->obj_id == sphere || obj_ptr->obj_id == cylinder)
+	if (obj_ptr->obj_id == sphere)
 	{
 		if ((new_size = obj_ptr->diameter + delta) < INT_MAX && new_size > 0)
 			obj_ptr->diameter += delta;
@@ -78,7 +90,7 @@ void
 }
 
 static void
-	make_move_2(t_param	*p_ptr, t_ray *ray_ptr, t_object *object, int key)
+	make_move_2(t_param *p_ptr, t_ray *ray_ptr, t_object *object, int key)
 {
 	if (ft_strchr("adws", key))
 	{

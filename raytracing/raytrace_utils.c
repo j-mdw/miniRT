@@ -1,4 +1,16 @@
-#include "../minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raytrace_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:08:34 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:32:05 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
 
 t_object
 	*get_object(t_object *obj_ptr, int obj_id)
@@ -18,9 +30,9 @@ t_object
 
 	store = current_obj;
 	if (current_obj->next_object)
-			tmp_obj = current_obj->next_object;
+		tmp_obj = current_obj->next_object;
 	else
-		tmp_obj =  p_ptr->object;
+		tmp_obj = p_ptr->object;
 	while (tmp_obj->obj_id != obj_id)
 	{
 		if (!tmp_obj->next_object)
@@ -55,9 +67,10 @@ void
 	set_camera_plan(t_param *p_ptr, t_ray *ray_ptr)
 {
 	ray_ptr->screen_dist = (((double)p_ptr->res_x) / 2.0) / \
-	tan(RADIAN(((double)p_ptr->current_camera->fov) / (2.0)));
+	tan(((double)p_ptr->current_camera->fov) / (2.0 * 180.0) * M_PI);
 	vec_copy(p_ptr->current_camera->coord1, ray_ptr->origin, 3);
-	set_pov_plan(p_ptr->current_camera->coord2, p_ptr->current_camera->coord3, ray_ptr);
+	set_pov_plan(p_ptr->current_camera->coord2, \
+	p_ptr->current_camera->coord3, ray_ptr);
 	vec_scalarprod(ray_ptr->vec_w, ray_ptr->screen_dist, 3);
 	vec_copy(ray_ptr->vec_u, ray_ptr->unit_u, 3);
 	vec_copy(ray_ptr->vec_v, ray_ptr->unit_v, 3);

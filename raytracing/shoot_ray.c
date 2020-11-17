@@ -1,4 +1,30 @@
-#include "../minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shoot_ray.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:08:55 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:08:56 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
+
+void
+	fill_window_save(t_param *p_ptr, int color, int x)
+{
+	int	i;
+
+	write(p_ptr->fd_bmp, &color, 3);
+	if (x == 1)
+	{
+		i = (p_ptr->res_x % 4);
+		while (i-- > 0)
+			write(p_ptr->fd_bmp, "\0", 1);
+	}
+}
 
 void
 	fill_window(t_param *p_ptr, int color, int x, int y)
@@ -8,24 +34,16 @@ void
 
 	i = 0;
 	if (p_ptr->save)
-	{
-		write(p_ptr->fd_bmp, &color, 3);
-		if (x == 1)
-		{
-			i = (p_ptr->res_x % 4);
-			while (i-- > 0)
-				write(p_ptr->fd_bmp, "\0", 1);
-		}
-	}
+		fill_window_save(p_ptr, color, x);
 	else
 	{
 		while (i < p_ptr->step && x + i <= p_ptr->res_x)
 		{
-			j = p_ptr->step;
-			while (j > 0 && y - j > 0)
+			j = 0;
+			while (j < p_ptr->step && y - j >= 0)
 			{
 				my_mlx_pixel_put(p_ptr->pix_ptr, x + i, y - j, color);
-				j--;
+				j++;
 			}
 			i++;
 		}
@@ -64,7 +82,6 @@ double
 	{
 		if (surface->obj_id < DIFF_SURFACE)
 		{
-			surface->inside = 0;
 			store = p_ptr->func_arr_ptr[surface->obj_id](ray_ptr, surface);
 			if (store > JEAN && (store < obj_dist || obj_dist == 0.0))
 			{
@@ -85,17 +102,17 @@ void
 	int			y;
 
 	set_camera_plan(p_ptr, &ray);
-	y = p_ptr->res_y;
-	while (y > 0 && (x = 1))
+	y = p_ptr->res_y - 1;
+	while (y >= 0 && !(x = 0))
 	{
-		ray.vec_v[0] = ray.unit_v[0] * ((double)p_ptr->res_y / 2.0 - y + 0.5);
-		ray.vec_v[1] = ray.unit_v[1] * ((double)p_ptr->res_y / 2.0 - y + 0.5);
-		ray.vec_v[2] = ray.unit_v[2] * ((double)p_ptr->res_y / 2.0 - y + 0.5);
-		while (x <= p_ptr->res_x)
+		ray.vec_v[0] = ray.unit_v[0] * (p_ptr->res_y / 2.0 - y);
+		ray.vec_v[1] = ray.unit_v[1] * (p_ptr->res_y / 2.0 - y);
+		ray.vec_v[2] = ray.unit_v[2] * (p_ptr->res_y / 2.0 - y);
+		while (x < p_ptr->res_x)
 		{
-			ray.vec_u[0] = ray.unit_u[0] * ((double)p_ptr->res_x / 2.0 * -1.0 + x + 0.5);
-			ray.vec_u[1] = ray.unit_u[1] * ((double)p_ptr->res_x / 2.0 * -1.0 + x + 0.5);
-			ray.vec_u[2] = ray.unit_u[2] * ((double)p_ptr->res_x / 2.0 * -1.0 + x + 0.5);		
+			ray.vec_u[0] = ray.unit_u[0] * (p_ptr->res_x / 2.0 * -1.0 + x);
+			ray.vec_u[1] = ray.unit_u[1] * (p_ptr->res_x / 2.0 * -1.0 + x);
+			ray.vec_u[2] = ray.unit_u[2] * (p_ptr->res_x / 2.0 * -1.0 + x);
 			vec_addition(ray.direction, ray.vec_u, ray.vec_v, 3);
 			vec_addition(ray.direction, ray.direction, ray.vec_w, 3);
 			vec_normalize(ray.direction, 3);

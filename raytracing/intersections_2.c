@@ -1,4 +1,16 @@
-#include "../minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersections_2.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:07:43 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:07:46 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
 
 static int
 	tri_helper(t_object *tri_ptr, double *tri_n, double *intersec)
@@ -54,6 +66,32 @@ double
 	return (0.0);
 }
 
+int
+	inside_cy(t_ray *ray_ptr, t_object *cy_ptr, double s1)
+{
+	double	intersec[3];
+	double	cy_top[3];
+	double	tmp_vec1[3];
+	double	tmp_vec2[3];
+
+	if (s1 <= JEAN)
+		return (0);
+	vec_copy(cy_ptr->coord2, cy_top, 3);
+	vec_scalarprod(cy_top, (double)cy_ptr->height, 3);
+	vec_addition(cy_top, cy_top, cy_ptr->coord1, 3);
+	vec_copy(ray_ptr->direction, intersec, 3);
+	vec_scalarprod(intersec, s1, 3);
+	vec_addition(intersec, intersec, ray_ptr->origin, 3);
+	vec_substract(tmp_vec1, intersec, cy_ptr->coord1, 3);
+	if ((dot_prod(tmp_vec1, cy_ptr->coord2, 3)) > JEAN)
+	{
+		vec_substract(tmp_vec2, intersec, cy_top, 3);
+		if (dot_prod(tmp_vec2, cy_ptr->coord2, 3) < JEAN)
+			return (1);
+	}
+	return (0);
+}
+
 /*
 **	Parameters:
 **	- Ro : ray origin
@@ -70,26 +108,19 @@ double
 **	c = ((Ro - Co) - ((Ro - Co).Cn)*Cn)^2 - r^2
 */
 
-int
-	outside_cy(t_ray *ray_ptr, t_object *cy_ptr, double s1, double s2)
+double
+	cy_helper(t_ray *ray_ptr, t_object *cy_ptr, double s1, double s2)
 {
-	double	solution;
-	double	dist;
-	double	vec1[3];
-
-	if (s1 > 0.0 && s1 < s2)
-		solution = s1;
-	else if (s2 > 0.0)
-		solution = s2;
-	else
-		return (1);
-	vec_copy(ray_ptr->direction, vec1, 3);
-	vec_scalarprod(vec1, solution, 3);
-	vec_addition(vec1, ray_ptr->origin, vec1, 3);
-	dist = dot_prod(vec1, cy_ptr->coord2, 3);
-	if (fabs(dist) > ((double)cy_ptr->height / 2))
-		return (1);
-	return (0);
+	if (inside_cy(ray_ptr, cy_ptr, s1))
+	{
+		if (inside_cy(ray_ptr, cy_ptr, s2))
+			return (s1 < s2 ? s1 : s2);
+		else
+			return (s1);
+	}
+	if (inside_cy(ray_ptr, cy_ptr, s2))
+		return (s2);
+	return (0.0);
 }
 
 double
@@ -113,13 +144,7 @@ double
 	q_param.discrim = pow(q_param.b, 2) - 4 * q_param.a * q_param.c;
 	if (q_param.discrim < 0.0)
 		return (0.0);
-	// else if (q_param.discrim == 0)
-	// 	return (-q_param.b / (2 * q_param.a));
 	q_param.solut_1 = (-q_param.b - sqrt(q_param.discrim)) / (2 * q_param.a);
 	q_param.solut_2 = (-q_param.b + sqrt(q_param.discrim)) / (2 * q_param.a);
-	if (outside_cy(ray_ptr, cy_ptr, q_param.solut_1, q_param.solut_2))
-		return (0.0);
-	if (q_param.solut_1 > 0.0 && q_param.solut_1 < q_param.solut_2)
-		return (q_param.solut_1);
-	return (q_param.solut_2);
+	return (cy_helper(ray_ptr, cy_ptr, q_param.solut_1, q_param.solut_2));
 }

@@ -5,31 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/01 18:12:03 by jmaydew           #+#    #+#             */
-/*   Updated: 2020/10/01 18:30:15 by jmaydew          ###   ########.fr       */
+/*   Created: 2020/11/17 22:40:25 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 22:41:15 by jmaydew          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef		MINIRT_H
-# define	MINIRT_H
+#ifndef MINIRT_H
+# define MINIRT_H
 
-# ifndef	M_PI
-# define	M_PI acos(-1.0)
+# ifndef M_PI
+#  define M_PI 3.141592653589
 # endif
 
-# define	PHONG_EXPONENT 100.0
-# define	DIFF_SURFACE 5
-# define	JEAN 0.000001
-# define	STEP 16
-# define	MOVE_SPEED 5.0
-# define	ANGLE 5.0
-# define	S_DELTA 1
-# define	RADIAN(X) ((X / 180.0) * M_PI)
-
-# include "libft/libft.h"
-# include "parsing/gnl/get_next_line.h"
-# include "minilibx-linux/mlx.h"
-# include "minilibx-linux/mlx_int.h"
+# define PHONG_EXPONENT 100.0
+# define DIFF_SURFACE 5
+# define JEAN 0.000001
+# define STEP 16
+# define MOVE_SPEED 5.0
+# define ANGLE 5.0
+# define S_DELTA 1
+# define FILE_EXTANSION ".rt"
+# define SAVE_FLAG "-save"
+# include "libft.h"
+# include "get_next_line.h"
+# include "mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
@@ -60,7 +59,6 @@ typedef struct	s_object {
 	double			height;
 	double			rgb[3];
 	int				fov;
-	int				inside;
 	struct s_object	*next_object;
 }				t_object;
 
@@ -81,7 +79,7 @@ typedef	struct	s_ray {
 	double		obj_dist;
 }				t_ray;
 
-typedef struct s_pix_data {
+typedef	struct	s_pix_data {
 	void		*img;
 	char		*addr;
 	int			bits_per_pixel;
@@ -89,14 +87,14 @@ typedef struct s_pix_data {
 	int			endian;
 }				t_pix_data;
 
-typedef struct s_quadratic {
+typedef struct	s_quadratic {
 	double      discrim;
     double      a;
     double      b;
     double      c;
     double      solut_1;
     double      solut_2;
-} t_quadratic;
+} 				t_quadratic;
 
 typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
 
@@ -214,7 +212,4 @@ void			rotate_object(t_object *obj_ptr, t_ray *ray, int key);
 void			resize_object(t_object *obj_ptr, int key);
 void			make_move(t_param *p_ptr, int key);
 
-/* REMOVE */
-
-void			print_vec(double *vec);
 #endif

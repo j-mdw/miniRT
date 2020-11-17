@@ -1,4 +1,17 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/11/17 19:10:11 by jmaydew           #+#    #+#              #
+#    Updated: 2020/11/17 19:34:50 by jmaydew          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 TEST_FILES = main.c my_mlx_pixel_put.c hooks.c movements.c save_minirt.c \
+			initializer.c \
 			parsing/parse_params_1.c parsing/parse_params_2.c \
 			parsing/parse_params_3.c parsing/parse_utils_1.c \
 			parsing/parse_errors_free.c parsing/gnl/get_next_line.c \
@@ -12,7 +25,7 @@ TEST_FILES = main.c my_mlx_pixel_put.c hooks.c movements.c save_minirt.c \
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 all: 
-	gcc $(CFLAGS) -I libft/ -I parsing/ -I minilibx-linux/ $(TEST_FILES) libft/libft.a -Lmlx_linux minilibx-linux/libmlx.a -L/usr/lib -lXext -lX11 -lm
+	gcc $(CFLAGS) -I libft/ -I includes/ -I parsing/gnl/ $(TEST_FILES) libft/libft.a -Lmlx_linux libmlx.a -L/usr/lib -lXext -lX11 -lm
 
 #test: $(TEST_FILES)
 #	gcc -Wall -Werror -Wextra -I libft/ -I parsing/ $(TEST_FILES) libft/libft.a -o minirt_parse -lm

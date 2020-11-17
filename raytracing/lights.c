@@ -1,4 +1,16 @@
-#include "../minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lights.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:07:52 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:07:54 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
 
 int
 	convert_rgb_format(double *rgb_arr)
@@ -40,7 +52,7 @@ double
 	double	vec_h[3];
 	double	spec_coeff;
 
-    spec_coeff = 0.5;
+	spec_coeff = 0.5;
 	vec_copy(ray_ptr->direction, ray_ptr->v_cam_eye, 3);
 	vec_scalarprod(ray_ptr->v_cam_eye, (-1.0 / \
 	vec_magnit(ray_ptr->v_cam_eye, 3)), 3);
@@ -62,7 +74,7 @@ int
 	surface = p_ptr->object;
 	vec_copy(ray_ptr->vec_intersect, shadow_ray.origin, 3);
 	vec_copy(ray_ptr->l_light_src, shadow_ray.direction, 3);
-	vec_scalarprod(shadow_ray.direction, (1 / max_dist), 3);
+	vec_normalize(shadow_ray.direction, 3);
 	while (surface)
 	{
 		if (surface->obj_id < DIFF_SURFACE)
@@ -94,8 +106,9 @@ void
 		i = 0;
 		while (i < 3)
 		{
-			rgb[i] += p_ptr->closest_surface->rgb[i] * light_ptr->brightness *\
-			 light_ptr->rgb[i] * dot_l_n;// + specular_reflexion(ray_ptr, light_ptr); //TBU: bcs specular reflexion is added, if light color is black, there is still reflexion
+			rgb[i] += p_ptr->closest_surface->rgb[i] * light_ptr->brightness \
+			* light_ptr->rgb[i] * dot_l_n + \
+			specular_reflexion(ray_ptr, light_ptr);
 			i++;
 		}
 	}
@@ -122,7 +135,8 @@ int
 	i = 0;
 	while (i < 3)
 	{
-		rgb[i] += p_ptr->light_ratio * p_ptr->light_rgb[i] * p_ptr->closest_surface->rgb[i];
+		rgb[i] += p_ptr->light_ratio * p_ptr->light_rgb[i] * \
+		p_ptr->closest_surface->rgb[i];
 		if (rgb[i] > 1.0)
 			rgb[i] = 1.0;
 		i++;

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/01 18:13:20 by jmaydew           #+#    #+#             */
-/*   Updated: 2020/10/01 18:52:31 by jmaydew          ###   ########.fr       */
+/*   Created: 2020/11/17 19:06:36 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:06:38 by jmaydew          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "minirt.h"
 
 int
 	ft_strcmp(const char *s1, const char *s2)

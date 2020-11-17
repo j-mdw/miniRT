@@ -1,16 +1,16 @@
 /* ************************************************************************** */
-/*																			  */
-/*														  :::	   ::::::::   */
-/*	 parse_utils_3.c									:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: jmaydew <marvin@42.fr>						+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2020/10/01 18:13:39 by jmaydew		   #+#	  #+#			  */
-/*	 Updated: 2020/10/01 19:26:09 by jmaydew		  ###	########.fr		  */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils_3.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:07:05 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:07:06 by jmaydew          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "minirt.h"
 
 void
 	add_new_elem_front(t_param *param_ptr)
@@ -32,14 +32,12 @@ void
 }
 
 void
-	resize_res(t_param * p_ptr)
+	resize_res(t_param *p_ptr)
 {
 	int	display_x;
 	int	display_y;
 
-	printf("\nWE HERE!\n\n");
 	mlx_get_screen_size(p_ptr->mlx_ptr, &display_x, &display_y);
-	printf("#######|%d|%d|#######\n", display_x, display_y);
 	if (display_x < p_ptr->res_x)
 		p_ptr->res_x = display_x;
 	if (display_y < p_ptr->res_y)

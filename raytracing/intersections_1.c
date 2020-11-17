@@ -1,4 +1,16 @@
-#include "../minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersections_1.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:07:33 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:07:36 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
 
 double
 	sphere_intersect(t_ray *ray_ptr, t_object *sphere)
@@ -13,15 +25,12 @@ double
 	pow((sphere->diameter / 2.0), 2);
 	q_param.discrim = pow(q_param.b, 2) - 4 * q_param.a * q_param.c;
 	if (q_param.discrim < 0.0)
-		return (-1.0);
+		return (0.0);
 	else if (q_param.discrim == 0)
 		return (-q_param.b / (2 * q_param.a));
 	q_param.solut_1 = (-q_param.b - sqrt(q_param.discrim)) / (2 * q_param.a);
 	q_param.solut_2 = (-q_param.b + sqrt(q_param.discrim)) / (2 * q_param.a);
-	if ((q_param.solut_1 > 0.0 && q_param.solut_2 < 0.0) || \
-	(q_param.solut_1 < 0.0 && q_param.solut_2 > 0.0))
-		sphere->inside = 1;
-	if (q_param.solut_1 > 0.0 && q_param.solut_1 < q_param.solut_2)
+	if (q_param.solut_1 > JEAN && q_param.solut_1 < q_param.solut_2)
 		return (q_param.solut_1);
 	return (q_param.solut_2);
 }
@@ -58,7 +67,7 @@ static double
 	vec_up[2] = 0;
 	set_pov_plan(sq_ptr->coord2, vec_up, &pov_plan);
 	if ((side_dist = fabs(dot_prod(pov_plan.vec_u, vec, 3))) \
-	<= ((cos(RADIAN(45.0)))))
+	<= ((cos(45.0 / 180 * M_PI))))
 		side_dist = fabs(dot_prod(pov_plan.vec_v, vec, 3));
 	side_dist = (sq_ptr->height / 2) / side_dist;
 	return (side_dist);

@@ -1,4 +1,16 @@
-#include "../minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_normals.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:08:47 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:08:48 by jmaydew          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
 
 static void
 	set_normal_2(t_object *surface, t_ray *ray_ptr)
@@ -22,8 +34,8 @@ static void
 		vec_scalarprod(tmp_vec2, dot_prod(tmp_vec1, tmp_vec2, 3), 3);
 		vec_substract(ray_ptr->n_normal, tmp_vec1, tmp_vec2, 3);
 		vec_normalize(ray_ptr->n_normal, 3);
-		// if (dot_prod(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
-		// 	vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
+		if (dot_prod(ray_ptr->direction, ray_ptr->n_normal, 3) > 0.0)
+			vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
 	}
 }
 
@@ -35,11 +47,8 @@ void
 		vec_substract(ray_ptr->n_normal, ray_ptr->vec_intersect, \
 		surface->coord1, 3);
 		vec_normalize(ray_ptr->n_normal, 3);
-		if (dot_prod(ray_ptr->n_normal, ray_ptr->direction, 3) > 0.0 /*&& surface->inside*/)
-		{
-			// printf("Inside!");
-			vec_scalarprod(ray_ptr->n_normal, -1, 3);
-		}
+		if (dot_prod(ray_ptr->n_normal, ray_ptr->direction, 3) > 0.0)
+			vec_scalarprod(ray_ptr->n_normal, -1.0, 3);
 	}
 	if (surface->obj_id == plane || surface->obj_id == square)
 	{

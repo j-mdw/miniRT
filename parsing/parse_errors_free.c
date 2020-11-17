@@ -1,16 +1,16 @@
 /* ************************************************************************** */
-/*																			  */
-/*														  :::	   ::::::::   */
-/*	 parse_errors_free.c								:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: jmaydew <marvin@42.fr>						+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2020/10/01 18:08:49 by jmaydew		   #+#	  #+#			  */
-/*	 Updated: 2020/10/01 19:11:09 by jmaydew		  ###	########.fr		  */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_errors_free.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 19:05:28 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/17 19:05:31 by jmaydew          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "minirt.h"
 
 void
 	del_all_elem(t_object *object_ptr)
@@ -56,11 +56,12 @@ void
 void
 	error_free(t_param *p_ptr, char *error_message)
 {
+	ft_putstr_fd("ERROR\n", 1);
 	ft_putstr_fd(error_message, 1);
 	ft_putchar_fd('\n', 1);
 	if (p_ptr->line)
 	{
-		ft_putstr_fd("Error on line: ", 1);
+		ft_putstr_fd("Error from line: ", 1);
 		ft_putstr_fd(p_ptr->line, 1);
 		ft_putchar_fd('\n', 1);
 	}
