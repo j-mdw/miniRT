@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 #define	FILE_EXTANSION ".rt"
-#define	SAVE_FLAG "--save"
+#define	SAVE_FLAG "-save"
 
 void
 	param_struct_init(t_param *param_ptr)
@@ -26,6 +26,16 @@ void
 	param_ptr->extra_split = NULL;
 	param_ptr->step = STEP;
 	param_ptr->selected_obj = NULL;
+}
+
+void
+	init_func_arr(t_args_func *func_arr)
+{
+	func_arr[sphere] = sphere_intersect;
+	func_arr[plane] = plane_intersect;
+	func_arr[square] = square_intersect;
+	func_arr[triangle] = triangle_intersect;
+	func_arr[cylinder] = cylinder_intersect;
 }
 
 void
@@ -76,7 +86,7 @@ int
 		ft_putstr_fd("Incorrect file extansion", 1);
 		return (0);
 	}
-	if (!(p_ptr->fd = open(argv[1], O_RDONLY)))
+	if (!(p_ptr->fd_rt = open(argv[1], O_RDONLY)))
 	{
 		ft_putstr_fd("Failed opening the file, please make sure the file exists\n", 1);
 		return (0);
@@ -108,21 +118,32 @@ int	main(int argc, char **argv)
 
 	if (!(check_open_file(argc, argv, &params)))
 		error_free(&params, "");
-	if(!(params.mlx_ptr = mlx_init()))
-		error_free(&params, "mlx_init failed");
-	params.mlx_win_ptr = mlx_new_window(params.mlx_ptr, params.res_x, params.res_y, "hello world");
-	img.img = mlx_new_image(params.mlx_ptr, params.res_x, params.res_y);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	params.pix_ptr = &img;
 	init_func_arr(func_arr);
-	params.func_arr_ptr = func_arr;
 	params.current_camera = get_object(params.object, camera);
-	ray_trace(&params);
-	mlx_put_image_to_window(params.mlx_ptr, params.mlx_win_ptr, img.img, 0, 0);
-	mlx_hook(params.mlx_win_ptr, 17, (1L << 17), deal_hook, &params);
-	mlx_key_hook(params.mlx_win_ptr, deal_key, &params);
-	mlx_mouse_hook(params.mlx_win_ptr, deal_mouse, &params);
-	mlx_loop(params.mlx_ptr);
+	params.func_arr_ptr = func_arr;
+	if (params.save)
+	{
+		save_minirt(&params);
+		params.step = 1;
+		ray_trace(&params);
+		close(params.fd_bmp);
+	}
+	else
+	{
+		if(!(params.mlx_ptr = mlx_init()))
+			error_free(&params, "mlx_init failed");
+		resize_res(&params);
+		params.mlx_win_ptr = mlx_new_window(params.mlx_ptr, params.res_x, params.res_y, "MiniRT");
+		img.img = mlx_new_image(params.mlx_ptr, params.res_x, params.res_y);
+		img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+		params.pix_ptr = &img;
+		ray_trace(&params);
+		mlx_put_image_to_window(params.mlx_ptr, params.mlx_win_ptr, img.img, 0, 0);
+		mlx_hook(params.mlx_win_ptr, 17, (1L << 17), deal_hook, &params);
+		mlx_key_hook(params.mlx_win_ptr, deal_key, &params);
+		mlx_mouse_hook(params.mlx_win_ptr, deal_mouse, &params);
+		mlx_loop(params.mlx_ptr);
+	}
 	free_all(&params);
 	return (0);
 }

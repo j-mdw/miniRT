@@ -42,7 +42,7 @@ int
 {
 	int gnl;
 
-	while ((gnl = get_next_line(p_ptr->fd, &p_ptr->line)) > 0)
+	while ((gnl = get_next_line(p_ptr->fd_rt, &p_ptr->line)) > 0)
 	{
 		replace_char(p_ptr->line, '\t', ' ');
 		if (p_ptr->line[0])

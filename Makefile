@@ -1,4 +1,4 @@
-TEST_FILES = main.c my_mlx_pixel_put.c hooks.c\
+TEST_FILES = main.c my_mlx_pixel_put.c hooks.c movements.c save_minirt.c \
 			parsing/parse_params_1.c parsing/parse_params_2.c \
 			parsing/parse_params_3.c parsing/parse_utils_1.c \
 			parsing/parse_errors_free.c parsing/gnl/get_next_line.c \

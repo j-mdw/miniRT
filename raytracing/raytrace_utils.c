@@ -10,38 +10,45 @@ t_object
 	return (NULL);
 }
 
-void
-	set_pov_plan(double *orient_vec, t_ray *ray_ptr)
+t_object
+	*get_next_object(t_param *p_ptr, t_object *current_obj, int obj_id)
 {
-	vec_copy(orient_vec, ray_ptr->vec_w, 3);
-	ray_ptr->vec_v[0] = 0;
-	ray_ptr->vec_v[1] = 1;
-	ray_ptr->vec_v[2] = 0;
-	if (ray_ptr->vec_w[0] == 0.0 && ray_ptr->vec_w[2] == 0.0) //&& (ray_ptr->vec_w[1] == -1.0 || ray_ptr->vec_w[1] == 1.0)
+	t_object *tmp_obj;
+	t_object *store;
+
+	store = current_obj;
+	if (current_obj->next_object)
+			tmp_obj = current_obj->next_object;
+	else
+		tmp_obj =  p_ptr->object;
+	while (tmp_obj->obj_id != obj_id)
 	{
-		printf("Oupsi!\n");
-		ray_ptr->vec_v[0] =  cos(RADIAN(95));
-		ray_ptr->vec_v[1] *= sin(RADIAN(95));
+		if (!tmp_obj->next_object)
+			tmp_obj = p_ptr->object;
+		else if (tmp_obj == store)
+			return (NULL);
+		else
+			tmp_obj = tmp_obj->next_object;
 	}
-	// {
-	//	   ray_ptr->vec_v[0] = -1;
-	//	   ray_ptr->vec_v[1] = 0;
-	//	   ray_ptr->vec_v[2] = 0;
-	// }
+	if (tmp_obj != store)
+		return (tmp_obj);
+	return (NULL);
+}
+
+void
+	set_pov_plan(double *orient_vec, double *up_vec, t_ray *ray_ptr)
+{
+	vec_copy(up_vec, ray_ptr->vec_v, 3);
+	vec_copy(orient_vec, ray_ptr->vec_w, 3);
+	if (fabs(dot_prod(orient_vec, up_vec, 3)) == 1.0)
+	{
+		ray_ptr->vec_w[0] += 0.001;
+		vec_normalize(ray_ptr->vec_w, 3);
+	}
 	cross_product(ray_ptr->vec_u, ray_ptr->vec_v, ray_ptr->vec_w);
 	cross_product(ray_ptr->vec_v, ray_ptr->vec_w, ray_ptr->vec_u);
 	vec_normalize(ray_ptr->vec_u, 3);
 	vec_normalize(ray_ptr->vec_v, 3);
-}
-
-void
-	init_func_arr(t_args_func *func_arr)
-{
-	func_arr[sphere] = sphere_intersect;
-	func_arr[plane] = plane_intersect;
-	func_arr[square] = square_intersect;
-	func_arr[triangle] = triangle_intersect;
-	func_arr[cylinder] = cylinder_intersect;
 }
 
 void
@@ -50,7 +57,7 @@ void
 	ray_ptr->screen_dist = (((double)p_ptr->res_x) / 2.0) / \
 	tan(RADIAN(((double)p_ptr->current_camera->fov) / (2.0)));
 	vec_copy(p_ptr->current_camera->coord1, ray_ptr->origin, 3);
-	set_pov_plan(p_ptr->current_camera->coord2, ray_ptr);
+	set_pov_plan(p_ptr->current_camera->coord2, p_ptr->current_camera->coord3, ray_ptr);
 	vec_scalarprod(ray_ptr->vec_w, ray_ptr->screen_dist, 3);
 	vec_copy(ray_ptr->vec_u, ray_ptr->unit_u, 3);
 	vec_copy(ray_ptr->vec_v, ray_ptr->unit_v, 3);

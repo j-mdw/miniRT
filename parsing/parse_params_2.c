@@ -32,6 +32,8 @@ void
 		else
 			error_free(p_ptr, "Incorrect 'y' resolution value");
 	}
+	if (p_ptr->res_x <= 0 || p_ptr->res_y <= 0)
+		error_free(p_ptr, "Resolution must be greater than 0");
 }
 
 void
@@ -79,6 +81,7 @@ void
 	else
 		error_free(p_ptr, "Camera FOV not a number");
 	p_ptr->cam_found += 1;
+	set_vec_up(p_ptr->object->coord3);
 }
 
 void

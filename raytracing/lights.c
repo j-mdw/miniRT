@@ -39,7 +39,7 @@ double
 {
 	double	vec_h[3];
 	double	spec_coeff;
-    
+
     spec_coeff = 0.5;
 	vec_copy(ray_ptr->direction, ray_ptr->v_cam_eye, 3);
 	vec_scalarprod(ray_ptr->v_cam_eye, (-1.0 / \
@@ -68,7 +68,7 @@ int
 		if (surface->obj_id < DIFF_SURFACE)
 		{
 			store = p_ptr->func_arr_ptr[surface->obj_id](&shadow_ray, surface);
-			if (store > JEAN && pow(store, 2) < pow(max_dist, 2))
+			if (store > JEAN && store < max_dist)
 				return (1);
 		}
 		surface = surface->next_object;
@@ -122,7 +122,7 @@ int
 	i = 0;
 	while (i < 3)
 	{
-		rgb[i] += p_ptr->light_ratio * p_ptr->light_rgb[i];
+		rgb[i] += p_ptr->light_ratio * p_ptr->light_rgb[i] * p_ptr->closest_surface->rgb[i];
 		if (rgb[i] > 1.0)
 			rgb[i] = 1.0;
 		i++;

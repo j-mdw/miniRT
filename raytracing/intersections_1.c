@@ -18,6 +18,9 @@ double
 		return (-q_param.b / (2 * q_param.a));
 	q_param.solut_1 = (-q_param.b - sqrt(q_param.discrim)) / (2 * q_param.a);
 	q_param.solut_2 = (-q_param.b + sqrt(q_param.discrim)) / (2 * q_param.a);
+	if ((q_param.solut_1 > 0.0 && q_param.solut_2 < 0.0) || \
+	(q_param.solut_1 < 0.0 && q_param.solut_2 > 0.0))
+		sphere->inside = 1;
 	if (q_param.solut_1 > 0.0 && q_param.solut_1 < q_param.solut_2)
 		return (q_param.solut_1);
 	return (q_param.solut_2);
@@ -48,8 +51,12 @@ static double
 {
 	t_ray	pov_plan;
 	double	side_dist;
+	double	vec_up[3];
 
-	set_pov_plan(sq_ptr->coord2, &pov_plan);
+	vec_up[0] = 0;
+	vec_up[1] = 1;
+	vec_up[2] = 0;
+	set_pov_plan(sq_ptr->coord2, vec_up, &pov_plan);
 	if ((side_dist = fabs(dot_prod(pov_plan.vec_u, vec, 3))) \
 	<= ((cos(RADIAN(45.0)))))
 		side_dist = fabs(dot_prod(pov_plan.vec_v, vec, 3));

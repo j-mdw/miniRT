@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef		MINIRT_H
+# define	MINIRT_H
 
-#ifndef		M_PI
+# ifndef	M_PI
 # define	M_PI acos(-1.0)
-#endif
+# endif
 
 # define	PHONG_EXPONENT 100.0
 # define	DIFF_SURFACE 5
@@ -23,12 +23,13 @@
 # define	STEP 16
 # define	MOVE_SPEED 5.0
 # define	ANGLE 5.0
+# define	S_DELTA 1
 # define	RADIAN(X) ((X / 180.0) * M_PI)
 
-# include "../libft/libft.h"
-# include "gnl/get_next_line.h"
-# include "../minilibx-linux/mlx.h"
-# include "../minilibx-linux/mlx_int.h"
+# include "libft/libft.h"
+# include "parsing/gnl/get_next_line.h"
+# include "minilibx-linux/mlx.h"
+# include "minilibx-linux/mlx_int.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
@@ -41,9 +42,9 @@
 
 typedef enum	e_param_id {
 	sphere,
-	plane,
 	square,
 	cylinder,
+	plane,
 	triangle,
 	camera,
 	light,
@@ -59,6 +60,7 @@ typedef struct	s_object {
 	double			height;
 	double			rgb[3];
 	int				fov;
+	int				inside;
 	struct s_object	*next_object;
 }				t_object;
 
@@ -100,7 +102,8 @@ typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
 
 typedef	struct	s_param {
 	int			step;
-	int			fd;
+	int			fd_rt;
+	int			fd_bmp;
 	int			res_found;
 	int			amb_light_found;
 	int			cam_found;
@@ -129,8 +132,12 @@ void			free_all(t_param *param);
 void			my_mlx_pixel_put(t_pix_data *data, int x, int y, int color);
 void			init_func_arr(t_args_func *func_arr);
 t_object		*get_object(t_object *obj_ptr, int obj_id);
+t_object		*get_next_object(t_param *p_ptr, t_object *current_obj, \
+				int obj_id);
+void			save_minirt(t_param *p_ptr);
 
 /* PARSING */
+
 int				ft_isblank(int c);
 void			replace_char(char *text, char find, char replace);
 int				parse_params(t_param *p_ptr);
@@ -150,16 +157,20 @@ void			parse_square(t_param *p_ptr);
 void			parse_cylinder(t_param *p_ptr);
 void			parse_triangle(t_param *p_ptr);
 int				minirt_atoi(char *s, t_param *p_ptr);
+void			set_vec_up(double *vec);
+void			resize_res(t_param *p_ptr);
 
 /* ERROR MANAGEMENT */
+
 int				check_file_extansion(char *filename, char *file_extansion);
 void			error_free(t_param *param, char *error_message);
 void			error_free(t_param *param, char *error_message);
 
 /* RAYTRACING */
+
 void			set_camera_plan(t_param *p_ptr, t_ray *ray_ptr);
 void			ray_trace(t_param *p_ptr);
-void			set_pov_plan(double *orient_vec, t_ray *ray_ptr);
+void			set_pov_plan(double *orient_vec, double *up_vec, t_ray *ray_ptr);
 void			set_normal(t_object *surface, t_ray *ray_ptr);
 double			set_closest(t_param *p_ptr, t_ray *ray_ptr);
 
@@ -196,6 +207,14 @@ int				deal_key(int key, void *param);
 int				deal_mouse(int button, int x, int y, void *param);
 int				deal_hook(void *params);
 
+/* MOVEMENTS */
+
+void			move_object(double *position, t_ray *ray, int key);
+void			rotate_object(t_object *obj_ptr, t_ray *ray, int key);
+void			resize_object(t_object *obj_ptr, int key);
+void			make_move(t_param *p_ptr, int key);
+
 /* REMOVE */
+
 void			print_vec(double *vec);
 #endif

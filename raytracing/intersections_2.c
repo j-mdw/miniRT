@@ -70,6 +70,28 @@ double
 **	c = ((Ro - Co) - ((Ro - Co).Cn)*Cn)^2 - r^2
 */
 
+int
+	outside_cy(t_ray *ray_ptr, t_object *cy_ptr, double s1, double s2)
+{
+	double	solution;
+	double	dist;
+	double	vec1[3];
+
+	if (s1 > 0.0 && s1 < s2)
+		solution = s1;
+	else if (s2 > 0.0)
+		solution = s2;
+	else
+		return (1);
+	vec_copy(ray_ptr->direction, vec1, 3);
+	vec_scalarprod(vec1, solution, 3);
+	vec_addition(vec1, ray_ptr->origin, vec1, 3);
+	dist = dot_prod(vec1, cy_ptr->coord2, 3);
+	if (fabs(dist) > ((double)cy_ptr->height / 2))
+		return (1);
+	return (0);
+}
+
 double
 	cylinder_intersect(t_ray *ray_ptr, t_object *cy_ptr)
 {
@@ -91,10 +113,12 @@ double
 	q_param.discrim = pow(q_param.b, 2) - 4 * q_param.a * q_param.c;
 	if (q_param.discrim < 0.0)
 		return (0.0);
-	else if (q_param.discrim == 0)
-		return (-q_param.b / (2 * q_param.a));
+	// else if (q_param.discrim == 0)
+	// 	return (-q_param.b / (2 * q_param.a));
 	q_param.solut_1 = (-q_param.b - sqrt(q_param.discrim)) / (2 * q_param.a);
 	q_param.solut_2 = (-q_param.b + sqrt(q_param.discrim)) / (2 * q_param.a);
+	if (outside_cy(ray_ptr, cy_ptr, q_param.solut_1, q_param.solut_2))
+		return (0.0);
 	if (q_param.solut_1 > 0.0 && q_param.solut_1 < q_param.solut_2)
 		return (q_param.solut_1);
 	return (q_param.solut_2);

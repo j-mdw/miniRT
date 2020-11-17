@@ -7,15 +7,28 @@ void
 	int j;
 
 	i = 0;
-	while (i < p_ptr->step && x < p_ptr->res_x)
+	if (p_ptr->save)
 	{
-		j = 0;
-		while (j < p_ptr->step && y < p_ptr->res_y)
+		write(p_ptr->fd_bmp, &color, 3);
+		if (x == 1)
 		{
-			my_mlx_pixel_put(p_ptr->pix_ptr, x + i, y + j, color);
-			j++;
+			i = (p_ptr->res_x % 4);
+			while (i-- > 0)
+				write(p_ptr->fd_bmp, "\0", 1);
 		}
-		i++;
+	}
+	else
+	{
+		while (i < p_ptr->step && x + i <= p_ptr->res_x)
+		{
+			j = p_ptr->step;
+			while (j > 0 && y - j > 0)
+			{
+				my_mlx_pixel_put(p_ptr->pix_ptr, x + i, y - j, color);
+				j--;
+			}
+			i++;
+		}
 	}
 }
 
@@ -51,8 +64,9 @@ double
 	{
 		if (surface->obj_id < DIFF_SURFACE)
 		{
+			surface->inside = 0;
 			store = p_ptr->func_arr_ptr[surface->obj_id](ray_ptr, surface);
-			if (store > 0.0 && (store < obj_dist || obj_dist == 0.0))
+			if (store > JEAN && (store < obj_dist || obj_dist == 0.0))
 			{
 				obj_dist = store;
 				p_ptr->closest_surface = surface;
@@ -71,24 +85,24 @@ void
 	int			y;
 
 	set_camera_plan(p_ptr, &ray);
-	x = 0;
-	while (x < p_ptr->res_x && !(y = 0))
+	y = p_ptr->res_y;
+	while (y > 0 && (x = 1))
 	{
-		ray.vec_u[0] = ray.unit_u[0] * ((double)p_ptr->res_x / 2.0 * -1.0 + x);
-		ray.vec_u[1] = ray.unit_u[1] * ((double)p_ptr->res_x / 2.0 * -1.0 + x);
-		ray.vec_u[2] = ray.unit_u[2] * ((double)p_ptr->res_x / 2.0 * -1.0 + x);
-		while (y < p_ptr->res_y)
+		ray.vec_v[0] = ray.unit_v[0] * ((double)p_ptr->res_y / 2.0 - y + 0.5);
+		ray.vec_v[1] = ray.unit_v[1] * ((double)p_ptr->res_y / 2.0 - y + 0.5);
+		ray.vec_v[2] = ray.unit_v[2] * ((double)p_ptr->res_y / 2.0 - y + 0.5);
+		while (x <= p_ptr->res_x)
 		{
-			ray.vec_v[0] = ray.unit_v[0] * ((double)p_ptr->res_y / 2.0 - y);
-			ray.vec_v[1] = ray.unit_v[1] * ((double)p_ptr->res_y / 2.0 - y);
-			ray.vec_v[2] = ray.unit_v[2] * ((double)p_ptr->res_y / 2.0 - y);
+			ray.vec_u[0] = ray.unit_u[0] * ((double)p_ptr->res_x / 2.0 * -1.0 + x + 0.5);
+			ray.vec_u[1] = ray.unit_u[1] * ((double)p_ptr->res_x / 2.0 * -1.0 + x + 0.5);
+			ray.vec_u[2] = ray.unit_u[2] * ((double)p_ptr->res_x / 2.0 * -1.0 + x + 0.5);		
 			vec_addition(ray.direction, ray.vec_u, ray.vec_v, 3);
 			vec_addition(ray.direction, ray.direction, ray.vec_w, 3);
 			vec_normalize(ray.direction, 3);
 			fill_window(p_ptr, set_ray_params(p_ptr, &ray, \
 			set_closest(p_ptr, &ray)), x, y);
-			y += p_ptr->step;
+			x += p_ptr->step;
 		}
-		x += p_ptr->step;
+		y -= p_ptr->step;
 	}
 }

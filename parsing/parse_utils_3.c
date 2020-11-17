@@ -22,3 +22,26 @@ void
 	new_obj->next_object = param_ptr->object;
 	param_ptr->object = new_obj;
 }
+
+void
+	set_vec_up(double *vec)
+{
+	vec[0] = 0;
+	vec[1] = 1;
+	vec[2] = 0;
+}
+
+void
+	resize_res(t_param * p_ptr)
+{
+	int	display_x;
+	int	display_y;
+
+	printf("\nWE HERE!\n\n");
+	mlx_get_screen_size(p_ptr->mlx_ptr, &display_x, &display_y);
+	printf("#######|%d|%d|#######\n", display_x, display_y);
+	if (display_x < p_ptr->res_x)
+		p_ptr->res_x = display_x;
+	if (display_y < p_ptr->res_y)
+		p_ptr->res_y = display_y;
+}

@@ -65,6 +65,6 @@ void
 		ft_putchar_fd('\n', 1);
 	}
 	free_all(p_ptr);
-	close(p_ptr->fd);
+	close(p_ptr->fd_rt);
 	exit(1);
 }
