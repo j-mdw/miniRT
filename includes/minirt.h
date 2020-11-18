@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/17 22:40:25 by jmaydew           #+#    #+#             */
-/*   Updated: 2020/11/17 22:41:15 by jmaydew          ###   ########.fr       */
+/*   Created: 2020/11/18 09:13:27 by jmaydew           #+#    #+#             */
+/*   Updated: 2020/11/18 09:16:27 by jmaydew          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@
 # include <fcntl.h>
 # include <math.h>
 # include <limits.h>
-# include <stdio.h>
 
 typedef enum	e_param_id {
 	sphere,
@@ -88,15 +87,15 @@ typedef	struct	s_pix_data {
 }				t_pix_data;
 
 typedef struct	s_quadratic {
-	double      discrim;
-    double      a;
-    double      b;
-    double      c;
-    double      solut_1;
-    double      solut_2;
-} 				t_quadratic;
+	double		discrim;
+	double		a;
+	double		b;
+	double		c;
+	double		solut_1;
+	double		solut_2;
+}				t_quadratic;
 
-typedef double (*t_args_func)(t_ray *ray_ptr, t_object *object);
+typedef	double	(*t_args_func)(t_ray *ray_ptr, t_object *object);
 
 typedef	struct	s_param {
 	int			step;
@@ -133,8 +132,10 @@ t_object		*get_object(t_object *obj_ptr, int obj_id);
 t_object		*get_next_object(t_param *p_ptr, t_object *current_obj, \
 				int obj_id);
 void			save_minirt(t_param *p_ptr);
-
-/* PARSING */
+int				check_open_file(int argc, char **argv, t_param *p_ptr);
+/*
+** PARSING
+*/
 
 int				ft_isblank(int c);
 void			replace_char(char *text, char find, char replace);
@@ -158,54 +159,72 @@ int				minirt_atoi(char *s, t_param *p_ptr);
 void			set_vec_up(double *vec);
 void			resize_res(t_param *p_ptr);
 
-/* ERROR MANAGEMENT */
+/*
+** ERROR MANAGEMENT
+*/
 
 int				check_file_extansion(char *filename, char *file_extansion);
 void			error_free(t_param *param, char *error_message);
 void			error_free(t_param *param, char *error_message);
 
-/* RAYTRACING */
+/*
+** RAYTRACING
+*/
 
 void			set_camera_plan(t_param *p_ptr, t_ray *ray_ptr);
 void			ray_trace(t_param *p_ptr);
-void			set_pov_plan(double *orient_vec, double *up_vec, t_ray *ray_ptr);
+void			set_pov_plan(double *orient_vec, double *up_vec, \
+				t_ray *ray_ptr);
 void			set_normal(t_object *surface, t_ray *ray_ptr);
 double			set_closest(t_param *p_ptr, t_ray *ray_ptr);
 
-/* VECTORS */
+/*
+** VECTORS
+*/
 
 void			vec_scalarprod(double *vector, double scalar, int dimension);
 double			dot_prod(double *vec1, double *vec2, int dimension);
-void			vec_addition(double *result, double *vec1, double *vec2, int dimension);
-void			vec_substract(double *result, double *vec1, double *vec2, int dimension);
+void			vec_addition(double *result, double *vec1, double *vec2, \
+				int dimension);
+void			vec_substract(double *result, double *vec1, double *vec2, \
+				int dimension);
 double			vec_magnit(double *vec, int dimension);
 void			cross_product(double *dst, double *vec1, double *vec2);
 void			vec_add_scalar(double *vec, double scalar, int dimension);
 void			vec_copy(double *src, double *dst, int dimension);
 void			vec_normalize(double *vec, int dimension);
 
-/* SHADING */
+/*
+** SHADING
+*/
 
 int				convert_rgb_format(double *rgb_arr);
 double			max_d(double nb1, double nb2);
 int				get_color(t_param *p_ptr, t_ray *ray_ptr);
 
-/* INTERSECTIONS */
+/*
+** INTERSECTIONS
+*/
 
 double			sphere_intersect(t_ray *ray_ptr, t_object *sphere);
-double			get_plane_intersec(t_ray *ray_ptr, double *plane_origin, double *plane_n);
+double			get_plane_intersec(t_ray *ray_ptr, double *plane_origin, \
+				double *plane_n);
 double			plane_intersect(t_ray *ray_ptr, t_object *plane_ptr);
 double			square_intersect(t_ray *ray_ptr, t_object *square_ptr);
 double			triangle_intersect(t_ray *ray_ptr, t_object *tri_ptr);
 double			cylinder_intersect(t_ray *ray_ptr, t_object *cy_ptr);
 
-/* HOOKS */
+/*
+** HOOKS
+*/
 
 int				deal_key(int key, void *param);
 int				deal_mouse(int button, int x, int y, void *param);
 int				deal_hook(void *params);
 
-/* MOVEMENTS */
+/*
+** MOVEMENTS
+*/
 
 void			move_object(double *position, t_ray *ray, int key);
 void			rotate_object(t_object *obj_ptr, t_ray *ray, int key);

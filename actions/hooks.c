@@ -6,7 +6,7 @@
 /*   By: jmaydew <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 19:04:47 by jmaydew           #+#    #+#             */
-/*   Updated: 2020/11/17 19:05:00 by jmaydew          ###   ########.fr       */
+/*   Updated: 2020/11/18 09:18:45 by jmaydew          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int
 	}
 	if (button == 3)
 		p_ptr->selected_obj = NULL;
-	printf("Button: %d, x: %d, y: %d\n", button, x, y);
 	return (0);
 }
 
